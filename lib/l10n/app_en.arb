@@ -1,0 +1,15 @@
+{
+  "@@locale": "en",
+  "title": "Help Center",
+  "message_input_hint": "Ask something...",
+  "end_chat": "End Chat",
+  "end_chat_desc": "Are you sure you want to end the chat session?",
+  "chat_button": "Chat with us",
+  "ai_loading": "Ai is thinking...",
+  "active_chat": "Active Chat",
+  "active_chat_desc": "You already have an active chat, do you want to close it?",
+  "close": "Close",
+  "confirm": "Confirm",
+  "cancel": "Cancel"
+
+}
