@@ -44,7 +44,7 @@ class _StartScreenState extends State<StartScreen> {
       darkTheme: AppThemeData.darkThemeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: Locale(BabylAI.currentLang),
+      locale: Locale(widget.locale),
       home: HelpScreen(),
     );
   }

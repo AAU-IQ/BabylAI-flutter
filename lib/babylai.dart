@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 
 class BabylAI {
 
-  static String currentLang = 'ar';
+  static String _locale = '';
+  static ThemeMode? _theme;
 
-  static void config() {
+  static void config(String locale, ThemeMode? theme) {
+    _locale = locale;
+    _theme = theme;
     try {
       ServiceLocator.configureDependencies();
     } catch (error) {
@@ -16,12 +19,12 @@ class BabylAI {
     }
   }
 
-  static void launch(BuildContext context, String language, ThemeMode? theme) {
+  static void launch(BuildContext context) {
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => StartScreen(locale: language, theme: theme,),
+        builder: (context) => StartScreen(locale: _locale, theme: _theme,),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppThemeData {
+  static const _locale = '';
   static const _lightFillColor = Colors.black;
   static const _darkFillColor = Colors.white;
 
@@ -29,8 +30,7 @@ class AppThemeData {
       ),
       colorScheme: colorScheme,
       extensions: [customColors],
-      textTheme: BabylAI.currentLang == 'ar' ? _arTextTheme : _textTheme,
-      // Matches manifest.json colors and background color.
+      textTheme: _arTextTheme,
       primaryColor: colorScheme.primary,
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.surface,

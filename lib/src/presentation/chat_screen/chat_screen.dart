@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:babylai/babylai.dart';
+import 'package:babylai/l10n/gen/app_localizations.dart';
 import 'package:babylai/src/constants/app_bar.dart';
 import 'package:babylai/src/constants/app_colors.dart';
 import 'package:babylai/src/core/widgets/message_bubble_widget.dart';
@@ -175,7 +176,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ? null
                       : _sendMessage,
                   icon: Transform.flip(
-                      flipX: BabylAI.currentLang == 'ar' ? true : false,
+                      flipX: AppLocalizations.of(context)!.localeName == 'ar' ? true : false,
                       child: SvgPicture.asset(Assets.lib.assets.svg.send, color:
                       _chatScreenStore.isThinking
                           ? Theme.of(context).colorScheme.outline

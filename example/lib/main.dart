@@ -29,12 +29,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  void initState() {
-    BabylAI.config();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BabylAI App',
@@ -100,7 +94,8 @@ class BabylAIExample extends StatelessWidget {
             SizedBox(height: 20,),
             ElevatedButton(
                 onPressed: () {
-                  BabylAI.launch(context, locale, themeMode);
+                  BabylAI.config(locale, themeMode);
+                  BabylAI.launch(context);
                 },
                 child: Text('Launch Babyl AI'))
           ],
