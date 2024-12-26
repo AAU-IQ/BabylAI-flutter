@@ -30,7 +30,7 @@ class AppThemeData {
       ),
       colorScheme: colorScheme,
       extensions: [customColors],
-      textTheme: _arTextTheme,
+      textTheme: arTextTheme,
       primaryColor: colorScheme.primary,
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.surface,
@@ -106,7 +106,7 @@ class AppThemeData {
   static const _semiBold = FontWeight.w600;
   static const _bold = FontWeight.w700;
 
-  static final TextTheme _arTextTheme = TextTheme(
+  static final TextTheme arTextTheme = TextTheme(
     headlineMedium: GoogleFonts.rubik(fontWeight: _bold, fontSize: 20.0),
     bodySmall: GoogleFonts.rubik(fontWeight: _semiBold, fontSize: 16.0),
     headlineSmall: GoogleFonts.rubik(fontWeight: _medium, fontSize: 16.0),

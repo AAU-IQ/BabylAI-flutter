@@ -1,3 +1,4 @@
+import 'package:babylai_demo/toast_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:babylai/babylai.dart';
 
@@ -26,6 +27,12 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _locale = isArabic ? 'ar' : 'en';
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    BabylAI.config();
   }
 
   @override
@@ -63,6 +70,7 @@ class BabylAIExample extends StatelessWidget {
     final isDarkTheme = themeMode == ThemeMode.dark;
     final isArabic = locale == 'ar';
 
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('BabylAI'),
@@ -94,8 +102,11 @@ class BabylAIExample extends StatelessWidget {
             SizedBox(height: 20,),
             ElevatedButton(
                 onPressed: () {
-                  BabylAI.config(locale, themeMode);
-                  BabylAI.launch(context);
+                  BabylAI.launch(locale, themeMode, context, onMessageReceived: (message) {
+                    ToastNotification.show(context: context, message: message, title: 'new message', onTap: () {
+                      BabylAI.lauchActiveChat();
+                    });
+                  });
                 },
                 child: Text('Launch Babyl AI'))
           ],

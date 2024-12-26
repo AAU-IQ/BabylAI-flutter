@@ -1,11 +1,9 @@
-import 'package:babylai/src/data/usecase/help_screen/get_help_screen_usecase.dart';
 import 'package:babylai/src/data/usecase/session/close_session_usecase.dart';
 import 'package:babylai/src/data/usecase/session/create_session_usecase.dart';
 import 'package:babylai/src/data/usecase/session/send_message_usecase.dart';
 import 'package:babylai/src/domain/entity/help_screen_entity.dart';
 import 'package:babylai/src/domain/entity/session/session_entity.dart';
 import 'package:mobx/mobx.dart';
-
 import '../../../domain/entity/message/message_entity.dart';
 import '../../../services/signalr_service.dart';
 
@@ -29,6 +27,7 @@ abstract class _ChatScreenStore with Store {
   final SendMessageUsecase _sendMessageUsecase;
   final CloseSessionUsecase _closeSessionUsecase;
   final SignalRService _signalRService;
+
   late Option option;
 
   @observable
@@ -51,6 +50,11 @@ abstract class _ChatScreenStore with Store {
 
   @observable
   bool isSessionClosed = false;
+
+  @observable
+  bool isChatActive = true;
+
+  Function(String)? onMessageReceivedCallback;
 
   // disposers:-----------------------------------------------------------------
   late List<ReactionDisposer> _disposers;
@@ -78,6 +82,11 @@ abstract class _ChatScreenStore with Store {
 
       // Add the actual AI response
       messages.insert(0, msg);
+
+      if (!isChatActive) {
+        onMessageReceivedCallback?.call(msg.text);
+      }
+
     });
 
     _signalRService.setOnErrorCallback((error) {
@@ -124,7 +133,6 @@ abstract class _ChatScreenStore with Store {
 
   @action
   Future<void> sendMessage(String msg, SenderType type, bool needsAgent, bool isSentByUser) async {
-    print('is connected ${_signalRService.isConnected()}');
 
     try {
       // Send the message to the backend if the session exists

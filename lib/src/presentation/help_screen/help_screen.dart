@@ -1,10 +1,9 @@
 import 'package:babylai/src/core/widgets/help_option_card.dart';
+import 'package:babylai/src/presentation/help_screen/start_screen.dart';
 import 'package:babylai/src/presentation/help_screen/store/help_screen_store.dart';
 import 'package:babylai/src/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../constants/app_bar.dart';
 import '../../core/widgets/loading_widget.dart';
 import '../../di/service_locator.dart';
@@ -14,7 +13,9 @@ import '../chat_screen/store/chat_screen_store.dart';
 import 'package:babylai/src/domain/entity/help_screen_entity.dart';
 
 class HelpScreen extends StatefulWidget {
-  const HelpScreen({super.key});
+  final VoidCallback onBack;
+
+  const HelpScreen({super.key, required this.onBack});
 
   @override
   State<HelpScreen> createState() => _HelpScreenState();
@@ -34,7 +35,15 @@ class _HelpScreenState extends State<HelpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PrimaryAppBar(title: context.localizations.title),
+      appBar: PrimaryAppBar(
+        title: context.localizations.title,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            widget.onBack();
+          },
+        ),
+      ),
       body: Container(
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(top: 18),
@@ -86,12 +95,12 @@ class _HelpScreenState extends State<HelpScreen> {
       ),
       floatingActionButton: Observer(
           builder: (_) => _chatScreenStore.sessionEntity != null ? FloatingActionButton(
-            backgroundColor: Colors.redAccent,
+            backgroundColor: Theme.of(context).primaryColor,
             shape: const CircleBorder(),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => ChatScreen(option: _chatScreenStore.option),
+                  builder: (context) => ChatScreen(option: _chatScreenStore.option, onBack: widget.onBack,),
                 ),
               );
             },
@@ -124,7 +133,7 @@ class _HelpScreenState extends State<HelpScreen> {
       if (_chatScreenStore.sessionEntity!.optionId == option.id) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ChatScreen(option: _chatScreenStore.option),
+            builder: (context) => ChatScreen(option: _chatScreenStore.option, onBack: widget.onBack,),
           ),
         );
       } else {
@@ -145,6 +154,7 @@ class _HelpScreenState extends State<HelpScreen> {
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(
         option: option,
+        onBack: widget.onBack,
       )));
     }
 

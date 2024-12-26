@@ -36,17 +36,16 @@ class SignalRService {
     _hubConnection = HubConnectionBuilder()
         .withUrl(Endpoints.signalRBaseUrl)
         .configureLogging(hubProtLogger)
+        .withAutomaticReconnect(retryDelays: [2000, 5000, 10000, 20000])
         .build();
 
-    // _hubConnection.onclose((Exception? error) async {
-    //   if (_onError != null && error != null) {
-    //     _onError!("Connection closed: $error");
-    //   }
-    // });
-
+    _hubConnection.onclose(({error}) {
+      if (_onError != null && error != null) {
+        _onError!("Connection closed: $error");
+      }
+    });
 
     _hubConnection.on("ReceiveMessage", (arguments) {
-      print('message args $arguments');
       try {
         final message = parseMessage(arguments);
         if (_onMessageReceived != null) {
@@ -58,6 +57,7 @@ class SignalRService {
         }
       }
     });
+
   }
 
   Future<void> startConnection() async {
@@ -83,21 +83,6 @@ class SignalRService {
       }
     } catch (error) {
       print(error);
-    }
-  }
-
-  /// Send a message to the SignalR hub
-  Future<void> sendMessage(String method, dynamic message) async {
-    try {
-      if (_hubConnection.state == HubConnectionState.Connected) {
-        await _hubConnection.invoke(method, args: [message]);
-      } else {
-        print("Cannot send message. Hub connection is not active.");
-      }
-    } catch (error) {
-      if (_onError != null) {
-        _onError!("Send failed: $error");
-      }
     }
   }
 

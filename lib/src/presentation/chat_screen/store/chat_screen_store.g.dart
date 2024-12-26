@@ -121,6 +121,22 @@ mixin _$ChatScreenStore on _ChatScreenStore, Store {
     });
   }
 
+  late final _$isChatActiveAtom =
+      Atom(name: '_ChatScreenStore.isChatActive', context: context);
+
+  @override
+  bool get isChatActive {
+    _$isChatActiveAtom.reportRead();
+    return super.isChatActive;
+  }
+
+  @override
+  set isChatActive(bool value) {
+    _$isChatActiveAtom.reportWrite(value, super.isChatActive, () {
+      super.isChatActive = value;
+    });
+  }
+
   late final _$initSignalRServiceAsyncAction =
       AsyncAction('_ChatScreenStore.initSignalRService', context: context);
 
@@ -183,7 +199,8 @@ isLoading: ${isLoading},
 isManagedByAgent: ${isManagedByAgent},
 isThinking: ${isThinking},
 success: ${success},
-isSessionClosed: ${isSessionClosed}
+isSessionClosed: ${isSessionClosed},
+isChatActive: ${isChatActive}
     ''';
   }
 }

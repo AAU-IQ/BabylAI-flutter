@@ -1,19 +1,26 @@
 import 'package:babylai/babylai.dart';
 import 'package:babylai/src/constants/app_theme.dart';
+import 'package:babylai/src/presentation/chat_screen/chat_screen.dart';
 import 'package:babylai/src/presentation/help_screen/help_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:no_screenshot/no_screenshot.dart';
 
 import '../../../l10n/gen/app_localizations.dart';
+import '../../di/service_locator.dart';
+import '../chat_screen/store/chat_screen_store.dart';
 
 class StartScreen extends StatefulWidget {
   final String locale;
   final ThemeMode? theme;
+  final bool directChat;
+  final VoidCallback onBack;
 
   const StartScreen({
     super.key,
     required this.locale,
-    this.theme
+    this.directChat = false,
+    this.theme,
+    required this.onBack
   });
 
   @override
@@ -23,7 +30,7 @@ class StartScreen extends StatefulWidget {
 class _StartScreenState extends State<StartScreen> {
 
   final _noScreenshot = NoScreenshot.instance;
-
+  final ChatScreenStore _chatScreenStore = getIt<ChatScreenStore>();
 
   @override
   void initState() {
@@ -45,7 +52,9 @@ class _StartScreenState extends State<StartScreen> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(widget.locale),
-      home: HelpScreen(),
+      home: widget.directChat
+          ? ChatScreen(option: _chatScreenStore.option, directChat: widget.directChat, onBack: widget.onBack)
+          : HelpScreen(onBack: widget.onBack),
     );
   }
 
