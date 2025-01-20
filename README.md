@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://babylai.net/assets/33-C9VTGXuK.png" alt="BabylAI Logo" width="200"/>
+</p>
+
 <!--
 This README describes the package. If you publish this package to pub.dev,
 this README's contents appear on the landing page for your package.
@@ -11,29 +15,155 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/to/develop-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+# BabylAI Flutter Package
+
+A Flutter package that provides integration with BabylAI chat functionality, supporting multiple themes and languages.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- 🚀 Easy integration with BabylAI chat
+- 🌓 Support for light and dark themes
+- 🌍 Multilingual support (English and Arabic)
+- 📬 Message receiving callback for custom notification handling
+- ⚡ Quick access to active chats
 
-## Getting started
+## Installation
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Since this is a private package, you'll need to add it to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  babylai:
+    git:
+      url: https://github.com/your-organization/babylai.git
+      ref: master  # or specify a version tag
+```
+
+If the repository requires authentication, you'll need to configure your Git credentials or use an access token.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+### 1. Initialize BabylAI
+
+First, configure BabylAI in your app's initialization:
 
 ```dart
-const like = 'sample';
+void main() {
+  BabylAI.config();
+  runApp(MyApp());
+}
 ```
 
-## Additional information
+### 2. Basic Implementation
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+Here's a simple example of how to integrate BabylAI in your Flutter app:
+
+```dart
+import 'package:babylai/babylai.dart';
+import 'package:flutter/material.dart';
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              BabylAI.launch(
+                'en',  // language code
+                ThemeMode.light,  // theme mode
+                context,
+                onMessageReceived: (message) {
+                  // Handle new message notifications
+                  print('New message: $message');
+                },
+              );
+            },
+            child: Text('Open BabylAI Chat'),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+### 3. Advanced Implementation
+
+For a more complete implementation with theme and language switching:
+
+```dart
+class BabylAIExample extends StatelessWidget {
+  final ThemeMode themeMode;
+  final String locale;
+  final ValueChanged<bool> onThemeToggle;
+  final ValueChanged<bool> onLanguageToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        BabylAI.launch(
+          locale,
+          themeMode,
+          context,
+          onMessageReceived: (message) {
+            // Implement your own notification handling here
+            // You can use any notification package or custom implementation
+          },
+        );
+      },
+      child: Text('Launch Babyl AI'),
+    );
+  }
+}
+```
+
+## API Reference
+
+### BabylAI Class
+
+#### Methods
+
+- `BabylAI.config()`: Initialize the BabylAI configuration
+- `BabylAI.launch(String locale, ThemeMode themeMode, BuildContext context, {Function(String) onMessageReceived})`: Launch the BabylAI chat interface
+- `BabylAI.lauchActiveChat()`: Open the currently active chat session
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| locale | String | Language code ('en' for English, 'ar' for Arabic) |
+| themeMode | ThemeMode | Flutter's ThemeMode (light/dark) |
+| onMessageReceived | Function(String) | Callback for handling new messages |
+
+## Message Handling
+
+The package provides a callback for handling new messages through the `onMessageReceived` parameter. You can implement your own notification system or message handling logic. Here's an example of how you might handle new messages:
+
+```dart
+BabylAI.launch(
+  locale,
+  themeMode,
+  context,
+  onMessageReceived: (message) {
+    // Implement your preferred notification system
+    // For example, using flutter_local_notifications
+    // or any other notification package
+    showCustomNotification(message);
+  },
+);
+```
+
+## Contributing
+
+For any issues or feature requests, please contact the package maintainers or submit an issue on the repository.
+
+## License
+
+Copyright © 2024 BabylAI
+
+This software is provided under a custom license agreement. Usage is permitted only with explicit authorization from BabylAI. This software may not be redistributed, modified, or used in derivative works without written permission from BabylAI.
+
+All rights reserved.
