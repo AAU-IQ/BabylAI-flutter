@@ -17,38 +17,38 @@ class ToastNotification {
     if (message.isNotEmpty) {
       toastification.dismissAll();
       toastification.show(
-        context: context,
-        title: Text(title, style: Theme.of(context).textTheme.labelSmall,),
-        description: Text(message, style: Theme.of(context).textTheme.titleSmall?.copyWith(
-          color: Theme.of(context).colorScheme.outline
-        ),),
-        alignment: Alignment.topCenter,
-        showProgressBar: false,
-        icon: Icon(icon, color: Theme.of(context).primaryColor,),
-        style: style,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 15,
-            offset: Offset(0, 3),
-            spreadRadius: 0,
+          context: context,
+          title: Text(title, style: Theme.of(context).textTheme.labelSmall,),
+          description: Text(message, style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: Theme.of(context).colorScheme.outline
+          ),),
+          alignment: Alignment.topCenter,
+          showProgressBar: false,
+          icon: Icon(icon, color: Theme.of(context).primaryColor,),
+          style: style,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 15,
+              offset: Offset(0, 3),
+              spreadRadius: 0,
+            )
+          ],
+          animationBuilder: (context, animation, alignment, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          dismissDirection: DismissDirection.up,
+          autoCloseDuration: autoCloseDuration,
+          animationDuration: animationDuration,
+          callbacks: ToastificationCallbacks(
+              onTap: (_) {
+                toastification.dismissAll();
+                onTap();
+              }
           )
-        ],
-        animationBuilder: (context, animation, alignment, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
-        },
-        dismissDirection: DismissDirection.up,
-        autoCloseDuration: autoCloseDuration,
-        animationDuration: animationDuration,
-        callbacks: ToastificationCallbacks(
-          onTap: (_) {
-            toastification.dismissAll();
-            onTap();
-          }
-        )
       );
     }
   }

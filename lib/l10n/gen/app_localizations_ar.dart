@@ -38,4 +38,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get cancel => 'إلغاء';
+
+  @override
+  String get error_message => 'حدثت مشكلة في الاتصال بالخدمة. يرجى التحقق من اتصالك والمحاولة مرة أخرى.';
+
+  @override
+  String get error_title => 'تعذر تحميل المحتوى';
+
+  @override
+  String get try_again => 'اعد المحاولة';
 }

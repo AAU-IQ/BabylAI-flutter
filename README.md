@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://babylai.net/assets/33-C9VTGXuK.png" alt="BabylAI Logo" width="200"/>
+  <img src="https://babylai.net/assets/33-C9VTGXuK.png" alt="BabylAI Logo" height="200"/>
 </p>
 
 <!--
@@ -43,16 +43,28 @@ If the repository requires authentication, you'll need to configure your Git cre
 
 ## Usage
 
-### 1. Initialize BabylAI
+### 1. Initialize BabylAI and Set Token Callback
 
-First, configure BabylAI in your app's initialization:
+First, configure BabylAI in your app's initialization and set up the token callback:
 
 ```dart
 void main() {
-  BabylAI.config();
+  // Configure BabylAI
+  BabylAI.configure();
+  
+  // IMPORTANT: You MUST set up a token callback for the package to work
+  BabylAI.setTokenCallback(() async {
+    // Example implementation to get a token
+    return your_access_token() // string
+  });
+  
   runApp(MyApp());
 }
 ```
+
+> ⚠️ **Important**: You must call `BabylAI.setTokenCallback()` before using any other BabylAI functionality. Failure to do so will result in authentication errors when trying to launch the chat interface.
+
+### Token Validation
 
 ### 2. Basic Implementation
 
@@ -126,9 +138,37 @@ class BabylAIExample extends StatelessWidget {
 
 #### Methods
 
-- `BabylAI.config()`: Initialize the BabylAI configuration
+- `BabylAI.configure()`: Initialize the BabylAI configuration
+- `BabylAI.setTokenCallback(Future<String> Function() callback)`: Set a callback function that will be called when the token needs to be refreshed
 - `BabylAI.launch(String locale, ThemeMode themeMode, BuildContext context, {Function(String) onMessageReceived})`: Launch the BabylAI chat interface
 - `BabylAI.lauchActiveChat()`: Open the currently active chat session
+
+### Token Callback
+
+The token callback is essential for authentication with the BabylAI service. The callback should:
+
+1. Make an API request to get a fresh token
+2. Parse the response correctly (the token is at the root level with key "token")
+3. Return the token as a string
+4. Handle errors appropriately
+
+Example response structure:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiresIn": 900
+}
+```
+
+### Automatic Token Refresh
+
+The package automatically handles token expiration by:
+
+1. Detecting 401 (Unauthorized) or 403 (Forbidden) HTTP errors
+2. Automatically calling your token callback to get a fresh token
+3. Storing the new token for subsequent requests
+
+This ensures that your users won't experience disruptions when their token expires during a session.
 
 ### Parameters
 

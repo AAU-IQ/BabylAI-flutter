@@ -38,4 +38,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get error_message => 'There was a problem connecting to the service. Please check your connection and try again.';
+
+  @override
+  String get error_title => 'Unable to load content';
+
+  @override
+  String get try_again => 'Try Again';
 }

@@ -1,5 +1,6 @@
 library babylai;
 
+import 'package:babylai/src/data/sharedpref/SharedPreferenceHelper.dart';
 import 'package:babylai/src/di/service_locator.dart';
 import 'package:babylai/src/presentation/chat_screen/chat_screen.dart';
 import 'package:babylai/src/presentation/chat_screen/store/chat_screen_store.dart';
@@ -7,29 +8,72 @@ import 'package:babylai/src/presentation/help_screen/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
-
 class BabylAI {
-
   static late ChatScreenStore _chatScreenStore;
   static Function(String)? _onMessageReceived;
   static late BuildContext _context;
   static late String _locale;
   static late ThemeMode? _theme;
 
+  /// Function to handle token refresh
+  static Future<String> Function()? _tokenCallback;
+
+  /// Set a callback function that will be called when the token needs to be refreshed
+  /// The callback should return a Future<String> with the new token
+  static void setTokenCallback(Future<String> Function() callback) {
+    _tokenCallback = callback;
+  }
+
+  /// Method to get a fresh token - exposed for internal use by interceptors
+  static Future<String?> getToken() async {
+    if (_tokenCallback != null) {
+      try {
+        return await _tokenCallback!();
+      } catch (e) {
+        print('Error getting token: $e');
+        // Don't throw an error here, just return null
+        return null;
+      }
+    }
+    return null;
+  }
+
   static void _inject() async {
     try {
       await ServiceLocator.configureDependencies();
       _chatScreenStore = getIt<ChatScreenStore>();
-    } catch (error) {
 
+      // Get token and handle it safely
+      String? token = await getToken();
+      if (token != null && token.isNotEmpty) {
+        _storeToken(token);
+      } else {
+        print('Warning: Failed to get a valid token during initialization');
+      }
+    } catch (error) {
+      print('Error injecting dependencies: $error');
     }
   }
 
-  static void config() {
+  static void _storeToken(String? token) {
+    if (token != null && token.isNotEmpty) {
+      getIt<SharedPreferenceHelper>().saveAuthToken(token);
+    } else {
+      print('Warning: Attempted to store null or empty token');
+    }
+  }
+
+  static void configure() {
     _inject();
   }
 
-  static void lauchActiveChat() {
+  static Future<void> lauchActiveChat() async {
+    // Check if we have a valid token before proceeding
+    if (!await _validateToken()) {
+      print('Error: No valid token available for launching active chat');
+      return;
+    }
+
     Navigator.push(
       _context,
       MaterialPageRoute(
@@ -45,16 +89,44 @@ class BabylAI {
     );
   }
 
-  static void launch(
-      String locale,
-      ThemeMode? theme,
-      BuildContext context, {
-        Function(String)? onMessageReceived,
-      }) {
+  /// Validates that a token exists and is valid
+  /// Returns true if valid, false otherwise
+  static Future<bool> _validateToken() async {
+    // First check if we have a stored token
+    final storedToken = await getIt<SharedPreferenceHelper>().authToken;
+
+    // If no stored token, try to get a fresh one
+    if (storedToken == null || storedToken.isEmpty) {
+      final freshToken = await getToken();
+
+      if (freshToken == null || freshToken.isEmpty) {
+        return false;
+      }
+
+      // Store the fresh token
+      _storeToken(freshToken);
+      return true;
+    }
+
+    return true;
+  }
+
+  static Future<void> launch(
+    String locale,
+    ThemeMode? theme,
+    BuildContext context, {
+    Function(String)? onMessageReceived,
+  }) async {
     _context = context;
     _onMessageReceived = onMessageReceived;
     _locale = locale;
     _theme = theme;
+
+    // Check if we have a valid token before proceeding
+    if (!await _validateToken()) {
+      throw Exception(
+          'No valid token available. Please ensure you have called BabylAI.setTokenCallback() with a valid token provider function.');
+    }
 
     Navigator.push(
       context,
@@ -73,5 +145,4 @@ class BabylAI {
       _onMessageReceived?.call(message);
     };
   }
-
 }

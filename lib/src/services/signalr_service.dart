@@ -1,5 +1,6 @@
 import 'package:babylai/src/data/network/constants/endpoints.dart';
 import 'package:logging/logging.dart';
+import 'package:signalr_netcore/ihub_protocol.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
 import '../domain/entity/message/message_entity.dart';
@@ -31,13 +32,21 @@ class SignalRService {
   }
 
   /// Initialize the SignalR connection
-  void initializeConnection() {
+  void initializeConnection(String token) {
     Logger.root.level = Level.ALL;
+
+    final headers = MessageHeaders();
+    headers.setHeaderValue('Authorization', 'Bearer $token');
+    final _options = HttpConnectionOptions(
+      headers: headers,
+    );
+
     _hubConnection = HubConnectionBuilder()
-        .withUrl(Endpoints.signalRBaseUrl)
+        .withUrl('${Endpoints.signalRBaseUrl}?access_token=$token',
+            options: _options)
         .configureLogging(hubProtLogger)
-        .withAutomaticReconnect(retryDelays: [2000, 5000, 10000, 20000])
-        .build();
+        .withAutomaticReconnect(
+            retryDelays: [2000, 5000, 10000, 20000]).build();
 
     _hubConnection.onclose(({error}) {
       if (_onError != null && error != null) {
@@ -57,7 +66,6 @@ class SignalRService {
         }
       }
     });
-
   }
 
   Future<void> startConnection() async {
@@ -105,13 +113,14 @@ class SignalRService {
     try {
       return MessageEntity(
         text: arguments[0] as String, // The message text
-        senderType: SenderTypeExtension.fromInt(arguments[1] as int), // Convert to SenderType enum
+        senderType: SenderTypeExtension.fromInt(
+            arguments[1] as int), // Convert to SenderType enum
         needsAgent: arguments[2] as bool, // Whether the message needs an agent
-        isSentByUser: (arguments[1] as int) == 1, // Check if the sender type is customer
+        isSentByUser:
+            (arguments[1] as int) == 1, // Check if the sender type is customer
       );
     } catch (e) {
       throw ArgumentError('Error parsing arguments: $e');
     }
   }
-
 }

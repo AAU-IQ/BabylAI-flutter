@@ -10,6 +10,9 @@
   "active_chat_desc": "You already have an active chat, do you want to close it?",
   "close": "Close",
   "confirm": "Confirm",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "error_message": "There was a problem connecting to the service. Please check your connection and try again.",
+  "error_title": "Unable to load content",
+  "try_again": "Try Again"
 
 }

@@ -3,6 +3,7 @@ import 'package:babylai/src/data/usecase/help_screen/get_help_screen_usecase.dar
 import 'package:babylai/src/data/usecase/session/close_session_usecase.dart';
 import 'package:babylai/src/data/usecase/session/create_session_usecase.dart';
 import 'package:babylai/src/data/usecase/session/send_message_usecase.dart';
+import 'package:babylai/src/data/sharedpref/SharedPreferenceHelper.dart';
 import 'package:babylai/src/presentation/chat_screen/store/chat_screen_store.dart';
 import 'package:babylai/src/presentation/help_screen/store/help_screen_store.dart';
 import 'package:babylai/src/services/signalr_service.dart';
@@ -30,7 +31,8 @@ class StoreModule {
         getIt<CreateSessionUsecase>(),
         getIt<SendMessageUsecase>(),
         getIt<CloseSessionUsecase>(),
-        SignalRService()
+        SignalRService(),
+        getIt<SharedPreferenceHelper>(),
       ),
     );
   }

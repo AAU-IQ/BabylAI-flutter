@@ -18,22 +18,19 @@ class ChatScreen extends StatefulWidget {
   final VoidCallback onBack;
   final bool directChat;
 
-  const ChatScreen({
-    super.key,
-    required this.option,
-    required this.onBack,
-    this.directChat = false
-  });
+  const ChatScreen(
+      {super.key,
+      required this.option,
+      required this.onBack,
+      this.directChat = false});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-
   final ChatScreenStore _chatScreenStore = getIt<ChatScreenStore>();
   final TextEditingController _controller = TextEditingController();
-
 
   @override
   void initState() {
@@ -56,9 +53,9 @@ class _ChatScreenState extends State<ChatScreen> {
       if (_chatScreenStore.messages.length == 0) {
         Future.delayed(Duration(seconds: 1), () {
           final welcomeMessage = widget.option.assistant.greeting;
-          _chatScreenStore.insertMessage(welcomeMessage, SenderType.ai, false, false);
+          _chatScreenStore.insertMessage(
+              welcomeMessage, SenderType.ai, false, false);
         });
-
       }
       _chatScreenStore.initSignalRService(widget.option);
       _chatScreenStore.isChatActive = true;
@@ -83,18 +80,16 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: [
           Observer(
               builder: (_) => _chatScreenStore.sessionEntity == null
-                  ? SizedBox.shrink() : TextButton(
-                  onPressed: (){
-                    showEndChatAlert();
-                  },
-                  child: Text(
-                    context.localizations.end_chat,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Colors.red,
-                        fontWeight: FontWeight.w800
-                    ),)
-              )
-          )
+                  ? SizedBox.shrink()
+                  : TextButton(
+                      onPressed: () {
+                        showEndChatAlert();
+                      },
+                      child: Text(
+                        context.localizations.end_chat,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: Colors.red, fontWeight: FontWeight.w800),
+                      )))
         ],
       ),
       body: SafeArea(
@@ -177,8 +172,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 SizedBox(width: 16),
                 Container(
-                  height: 50,
-                  width: 50,
+                  height: 40,
+                  width: 40,
                   decoration: BoxDecoration(
                     color: isThinking
                         ? Theme.of(context).colorScheme.surfaceContainer
@@ -207,19 +202,19 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void showEndChatAlert() {
-    showDialog(context: this.context, builder: (ctx) => CustomAlert(
-      title: context.localizations.end_chat,
-      content: context.localizations.end_chat_desc,
-        action1Text: context.localizations.confirm,
-        action1Callback: () {
-          _chatScreenStore.closeSession();
-          Navigator.pop(ctx);
-        },
-        action2Text: context.localizations.cancel,
-        action2Callback: () {
-          Navigator.pop(ctx);
-        }
-    ));
+    showDialog(
+        context: this.context,
+        builder: (ctx) => CustomAlert(
+            title: context.localizations.end_chat,
+            content: context.localizations.end_chat_desc,
+            action1Text: context.localizations.confirm,
+            action1Callback: () {
+              _chatScreenStore.closeSession();
+              Navigator.pop(ctx);
+            },
+            action2Text: context.localizations.cancel,
+            action2Callback: () {
+              Navigator.pop(ctx);
+            }));
   }
-
 }

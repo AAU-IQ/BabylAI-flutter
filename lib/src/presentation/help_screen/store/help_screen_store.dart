@@ -9,7 +9,6 @@ part 'help_screen_store.g.dart';
 class HelpScreenStore = _HelpScreenStore with _$HelpScreenStore;
 
 abstract class _HelpScreenStore with Store {
-
   _HelpScreenStore(this._getHelpScreenUsecase);
 
   // use cases:-----------------------------------------------------------------
@@ -37,5 +36,4 @@ abstract class _HelpScreenStore with Store {
       isLoading = false;
     }
   }
-
 }

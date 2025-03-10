@@ -4,6 +4,7 @@ import 'package:babylai/src/data/usecase/session/send_message_usecase.dart';
 import 'package:babylai/src/domain/entity/help_screen_entity.dart';
 import 'package:babylai/src/domain/entity/session/session_entity.dart';
 import 'package:mobx/mobx.dart';
+import '../../../data/sharedpref/SharedPreferenceHelper.dart';
 import '../../../domain/entity/message/message_entity.dart';
 import '../../../services/signalr_service.dart';
 
@@ -12,13 +13,12 @@ part 'chat_screen_store.g.dart';
 class ChatScreenStore = _ChatScreenStore with _$ChatScreenStore;
 
 abstract class _ChatScreenStore with Store {
-
   _ChatScreenStore(
       this._createSessionUsecase,
       this._sendMessageUsecase,
       this._closeSessionUsecase,
-      this._signalRService
-      ) {
+      this._signalRService,
+      this._sharedPreferenceHelper) {
     _setupDisposers();
   }
 
@@ -27,6 +27,7 @@ abstract class _ChatScreenStore with Store {
   final SendMessageUsecase _sendMessageUsecase;
   final CloseSessionUsecase _closeSessionUsecase;
   final SignalRService _signalRService;
+  final SharedPreferenceHelper _sharedPreferenceHelper;
 
   late Option option;
 
@@ -71,8 +72,8 @@ abstract class _ChatScreenStore with Store {
     _signalRService.setOnMessageReceivedCallback((msg) {
       // Remove the "AI is thinking" bubble
       if (isThinking) {
-        messages.removeWhere(
-                (message) => message.text == "thinking" && message.senderType == SenderType.ai);
+        messages.removeWhere((message) =>
+            message.text == "thinking" && message.senderType == SenderType.ai);
         isThinking = false;
       }
 
@@ -86,18 +87,23 @@ abstract class _ChatScreenStore with Store {
       if (!isChatActive) {
         onMessageReceivedCallback?.call(msg.text);
       }
-
     });
 
     _signalRService.setOnErrorCallback((error) {
       print('SignalR Error: $error');
     });
 
-    _signalRService.initializeConnection();
+    final token = await _sharedPreferenceHelper.authToken;
+    if (token != null && token.isNotEmpty) {
+      _signalRService.initializeConnection(token);
+    } else {
+      print('No token found');
+    }
   }
 
   @action
-  void insertMessage(String msg, SenderType type, bool needsAgent, bool isSentByUser) {
+  void insertMessage(
+      String msg, SenderType type, bool needsAgent, bool isSentByUser) {
     messages.insert(
       0,
       MessageEntity(
@@ -132,20 +138,22 @@ abstract class _ChatScreenStore with Store {
   }
 
   @action
-  Future<void> sendMessage(String msg, SenderType type, bool needsAgent, bool isSentByUser) async {
-
+  Future<void> sendMessage(
+      String msg, SenderType type, bool needsAgent, bool isSentByUser) async {
     try {
       // Send the message to the backend if the session exists
       if (sessionEntity != null) {
         if (_signalRService.isConnected()) {
           await _sendMessageUsecase.call(
-            params: SendMessageParams(content: msg, sessionId: sessionEntity!.id),
+            params:
+                SendMessageParams(content: msg, sessionId: sessionEntity!.id),
           );
         } else {
           await _signalRService.startConnection();
           await _signalRService.joinGroup(sessionEntity!.id);
           await _sendMessageUsecase.call(
-            params: SendMessageParams(content: msg, sessionId: sessionEntity!.id),
+            params:
+                SendMessageParams(content: msg, sessionId: sessionEntity!.id),
           );
         }
       }
@@ -161,7 +169,8 @@ abstract class _ChatScreenStore with Store {
       isLoading = true;
 
       // Create the session
-      final params = CreateSessionParams(helpScreenId: option.helpScreenId, optionId: option.id);
+      final params = CreateSessionParams(
+          helpScreenId: option.helpScreenId, optionId: option.id);
       final response = await _createSessionUsecase.call(params: params);
       sessionEntity = response;
 
@@ -188,14 +197,14 @@ abstract class _ChatScreenStore with Store {
   Future<void> closeSession() async {
     final sessionId = sessionEntity?.id;
     if (sessionId != null)
-    try {
-      await _closeSessionUsecase.call(params: sessionId);
-      cleanUp();
-    } catch (error) {
-      success = false;
-    } finally {
-      isLoading = false;
-    }
+      try {
+        await _closeSessionUsecase.call(params: sessionId);
+        cleanUp();
+      } catch (error) {
+        success = false;
+      } finally {
+        isLoading = false;
+      }
   }
 
   void cleanUp() {
@@ -203,6 +212,7 @@ abstract class _ChatScreenStore with Store {
     _signalRService.stopConnection();
     insertMessage(option.assistant.closing, SenderType.ai, false, false);
     isSessionClosed = true;
+    _sharedPreferenceHelper.removeAuthToken();
   }
 
   void dispose() {
@@ -220,5 +230,4 @@ abstract class _ChatScreenStore with Store {
     success = false;
     isSessionClosed = false;
   }
-
 }
