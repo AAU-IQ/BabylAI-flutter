@@ -13,10 +13,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get message_input_hint => 'إسال شيأ...';
 
   @override
-  String get end_chat => 'إنهاء المحادثة';
+  String get end_chat => 'مغادرة المحادثة؟ 👋';
 
   @override
-  String get end_chat_desc => 'هل أنت متأكيد من إنهاء المحادثة؟';
+  String get end_chat_desc => 'لا تقلق، يمكنك العودة في أي وقت. نحن دائماً هنا إذا كنت بحاجة إلى مساعدة أو لديك أسئلة.';
 
   @override
   String get chat_button => 'تواصل معنا';

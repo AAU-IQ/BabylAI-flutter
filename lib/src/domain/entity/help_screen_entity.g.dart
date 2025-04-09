@@ -11,7 +11,7 @@ HelpScreenEntity _$HelpScreenEntityFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       tenantId: json['tenantId'] as String,
       title: json['title'] as String,
-      description: json['description'] as String,
+      description: json['description'] as String?,
       options: (json['options'] as List<dynamic>)
           .map((e) => Option.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -82,7 +82,9 @@ Option _$OptionFromJson(Map<String, dynamic> json) => Option(
       id: json['id'] as String,
       helpScreenId: json['helpScreenId'] as String,
       parentOptionId: json['parentOptionId'] as String?,
-      assistant: Assistant.fromJson(json['assistant'] as Map<String, dynamic>),
+      assistant: json['assistant'] == null
+          ? null
+          : Assistant.fromJson(json['assistant'] as Map<String, dynamic>),
       title: json['title'] as String,
       paragraphs: (json['paragraphs'] as List<dynamic>)
           .map((e) => e as String)
@@ -93,7 +95,7 @@ Map<String, dynamic> _$OptionToJson(Option instance) => <String, dynamic>{
       'id': instance.id,
       'helpScreenId': instance.helpScreenId,
       'parentOptionId': instance.parentOptionId,
-      'assistant': instance.assistant.toJson(),
+      'assistant': instance.assistant?.toJson(),
       'title': instance.title,
       'paragraphs': instance.paragraphs,
     };

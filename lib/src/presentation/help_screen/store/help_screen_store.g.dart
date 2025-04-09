@@ -61,8 +61,8 @@ mixin _$HelpScreenStore on _HelpScreenStore, Store {
       AsyncAction('_HelpScreenStore.getHelpScreen', context: context);
 
   @override
-  Future<void> getHelpScreen() {
-    return _$getHelpScreenAsyncAction.run(() => super.getHelpScreen());
+  Future<void> getHelpScreen(String id) {
+    return _$getHelpScreenAsyncAction.run(() => super.getHelpScreen(id));
   }
 
   @override

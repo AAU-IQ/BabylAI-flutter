@@ -4,6 +4,7 @@ import 'package:babylai/src/presentation/help_screen/store/help_screen_store.dar
 import 'package:babylai/src/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_svg/svg.dart';
 import '../../constants/app_bar.dart';
 import '../../core/widgets/loading_widget.dart';
 import '../../di/service_locator.dart';
@@ -11,11 +12,13 @@ import '../../utils/primary_alert.dart';
 import '../chat_screen/chat_screen.dart';
 import '../chat_screen/store/chat_screen_store.dart';
 import 'package:babylai/src/domain/entity/help_screen_entity.dart';
+import 'package:babylai/gen/assets.gen.dart';
 
 class HelpScreen extends StatefulWidget {
+  final String screenId;
   final VoidCallback onBack;
 
-  const HelpScreen({super.key, required this.onBack});
+  const HelpScreen({super.key, required this.screenId, required this.onBack});
 
   @override
   State<HelpScreen> createState() => _HelpScreenState();
@@ -28,15 +31,19 @@ class _HelpScreenState extends State<HelpScreen> {
   @override
   void initState() {
     super.initState();
-    _helpScreenStore.getHelpScreen();
+    _helpScreenStore.getHelpScreen(widget.screenId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surfaceBright,
         appBar: PrimaryAppBar(
-          title: context.localizations.title,
+          backgroundColor: Theme.of(context).colorScheme.surfaceBright,
           leading: IconButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+            ),
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               widget.onBack();
@@ -71,8 +78,11 @@ class _HelpScreenState extends State<HelpScreen> {
                       );
                     },
                     tooltip: 'Chat',
-                    child: const Icon(Icons.chat_bubble, color: Colors.white),
-                  )
+                    child: Image.asset(
+                      Assets.lib.assets.images.chatBubble.keyName,
+                      height: 26,
+                      width: 26,
+                    ))
                 : SizedBox.shrink()));
   }
 
@@ -85,7 +95,7 @@ class _HelpScreenState extends State<HelpScreen> {
           child: Column(
             children: [
               Text(_helpScreenStore.helpScreen?.title ?? '',
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                       color: Theme.of(context).primaryColor)),
@@ -155,9 +165,12 @@ class _HelpScreenState extends State<HelpScreen> {
             SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: () {
-                _helpScreenStore.getHelpScreen();
+                _helpScreenStore.getHelpScreen(widget.screenId);
               },
-              icon: Icon(Icons.refresh, color: Colors.white,),
+              icon: Icon(
+                Icons.refresh,
+                color: Colors.white,
+              ),
               label: Text(context.localizations.try_again),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColor,

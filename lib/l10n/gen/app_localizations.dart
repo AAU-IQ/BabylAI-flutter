@@ -110,19 +110,19 @@ abstract class AppLocalizations {
   /// No description provided for @end_chat.
   ///
   /// In en, this message translates to:
-  /// **'End Chat'**
+  /// **'Leaving so soon? 👋'**
   String get end_chat;
 
   /// No description provided for @end_chat_desc.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to end the chat session?'**
+  /// **'Don\'t worry, you can come back anytime. We’re always here if you need help or have questions.'**
   String get end_chat_desc;
 
   /// No description provided for @chat_button.
   ///
   /// In en, this message translates to:
-  /// **'Chat with us'**
+  /// **'Chat Now'**
   String get chat_button;
 
   /// No description provided for @ai_loading.

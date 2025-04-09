@@ -44,11 +44,10 @@ class CustomAlert extends StatelessWidget {
                   ),
                   SizedBox(width: 8,),
                   Expanded(
-                      child: RoundedButtonWidget(
+                      child: OutlinedRoundedButtonWidget(
                         buttonText: action2Text,
                         onPressed: action2Callback,
-                        buttonColor: Theme.of(context).colorScheme.onInverseSurface,
-                        textColor: Theme.of(context).colorScheme.outline,
+                        textColor: Theme.of(context).colorScheme.primary,
                       )
                   ),
                 ],
@@ -56,8 +55,9 @@ class CustomAlert extends StatelessWidget {
             ],
             title: Text(
                 title,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: Theme.of(context).primaryColor
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
             ),
             content: Text(

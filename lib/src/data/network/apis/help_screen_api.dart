@@ -13,7 +13,7 @@ class HelpScreenApi {
   Future<HelpScreenEntity> getHelpScreen(String id) async {
     try {
       final res = await _dioClient.dio
-          .get('${Endpoints.getScreen}/57949b38-1a7b-4ca6-a137-6c04848dd67f');
+          .get('${Endpoints.getScreen}/$id');
       return HelpScreenEntity.fromJson(res.data);
     } catch (e) {
       print(e.toString());

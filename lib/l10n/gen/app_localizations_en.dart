@@ -13,13 +13,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get message_input_hint => 'Ask something...';
 
   @override
-  String get end_chat => 'End Chat';
+  String get end_chat => 'Leaving so soon? 👋';
 
   @override
-  String get end_chat_desc => 'Are you sure you want to end the chat session?';
+  String get end_chat_desc => 'Don\'t worry, you can come back anytime. We’re always here if you need help or have questions.';
 
   @override
-  String get chat_button => 'Chat with us';
+  String get chat_button => 'Chat Now';
 
   @override
   String get ai_loading => 'Ai is thinking...';

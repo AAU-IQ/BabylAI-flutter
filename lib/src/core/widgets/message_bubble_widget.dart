@@ -60,12 +60,12 @@ class MessageBubble extends StatelessWidget {
                 constraints: BoxConstraints(
                     maxWidth: MediaQuery.of(context).size.width * 0.75),
                 decoration: BoxDecoration(
-                  color: message.getColor(context),
+                  color: message.getMessageBubbleColor(context),
                   borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(16),
                     topRight: const Radius.circular(16),
                     bottomLeft: const Radius.circular(16),
-                    bottomRight: const Radius.circular(0),
+                    bottomRight: const Radius.circular(16),
                   ),
                 ),
                 child: Text(
@@ -74,7 +74,7 @@ class MessageBubble extends StatelessWidget {
                       .textTheme
                       .labelMedium
                       ?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       fontSize: 14),
                 ),
               ),
@@ -90,16 +90,15 @@ class MessageBubble extends StatelessWidget {
             ],
           )
               : Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 19, left: 16),
+                padding: const EdgeInsets.only(top: 4, left: 16),
                 child: Container(
                   child: Padding(
                     padding: const EdgeInsets.all(7.0),
                     child: SvgPicture.asset(
                       message.iconName,
-                      color: Theme.of(context).hintColor,
                     ),
                   ),
                   height: 30,
@@ -121,13 +120,8 @@ class MessageBubble extends StatelessWidget {
                         maxWidth: MediaQuery.of(context).size.width *
                             0.75),
                     decoration: BoxDecoration(
-                      color: message.getColor(context),
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(16),
-                        topRight: const Radius.circular(16),
-                        bottomLeft: const Radius.circular(0),
-                        bottomRight: const Radius.circular(16),
-                      ),
+                      color: message.getMessageBubbleColor(context),
+                      borderRadius: BorderRadius.all(Radius.circular(24))
                     ),
                     child: message.senderType == SenderType.agent
                         ? Text(

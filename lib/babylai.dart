@@ -14,6 +14,7 @@ class BabylAI {
   static late BuildContext _context;
   static late String _locale;
   static late ThemeMode? _theme;
+  static late String _screenId;
 
   /// Function to handle token refresh
   static Future<String> Function()? _tokenCallback;
@@ -63,7 +64,8 @@ class BabylAI {
     }
   }
 
-  static void configure() {
+  static void configure(String screenId) {
+    _screenId = screenId;
     _inject();
   }
 
@@ -78,6 +80,7 @@ class BabylAI {
       _context,
       MaterialPageRoute(
         builder: (context) => StartScreen(
+          screenId: _screenId,
           locale: _locale,
           theme: _theme,
           directChat: true,
@@ -132,6 +135,7 @@ class BabylAI {
       context,
       MaterialPageRoute(
         builder: (context) => StartScreen(
+          screenId: _screenId,
           locale: locale,
           theme: theme,
           onBack: () {

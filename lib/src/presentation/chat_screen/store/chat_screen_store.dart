@@ -210,7 +210,7 @@ abstract class _ChatScreenStore with Store {
   void cleanUp() {
     sessionEntity = null;
     _signalRService.stopConnection();
-    insertMessage(option.assistant.closing, SenderType.ai, false, false);
+    insertMessage(option.assistant?.closing ?? '', SenderType.ai, false, false);
     isSessionClosed = true;
     _sharedPreferenceHelper.removeAuthToken();
   }

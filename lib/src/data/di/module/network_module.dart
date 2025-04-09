@@ -11,56 +11,68 @@ import '../../network/constants/endpoints.dart';
 import '../../network/interceptors/error_interceptor.dart';
 import '../../network/rest_client.dart';
 import '../../sharedpref/SharedPreferenceHelper.dart';
+import 'package:get_it/get_it.dart';
 
 class NetworkModule {
   static Future<void> configureNetworkModuleInjection() async {
-    // event bus:---------------------------------------------------------------
-    getIt.registerSingleton<EventBus>(EventBus());
-
     // interceptors:------------------------------------------------------------
-    getIt.registerSingleton<ErrorInterceptor>(
-      ErrorInterceptor(getIt<SharedPreferenceHelper>()),
-    );
-    getIt.registerSingleton<AuthInterceptor>(
-      AuthInterceptor(
-        accessToken: () async =>
-            await getIt<SharedPreferenceHelper>().authToken,
-      ),
-    );
+    if (!GetIt.I.isRegistered<ErrorInterceptor>()) {
+      getIt.registerSingleton<ErrorInterceptor>(
+        ErrorInterceptor(getIt<SharedPreferenceHelper>()),
+      );
+    }
+    if (!GetIt.I.isRegistered<AuthInterceptor>()) {
+      getIt.registerSingleton<AuthInterceptor>(
+        AuthInterceptor(
+          accessToken: () async =>
+              await getIt<SharedPreferenceHelper>().authToken,
+        ),
+      );
+    }
 
     // rest client:-------------------------------------------------------------
-    getIt.registerSingleton(RestClient());
+    if (!GetIt.I.isRegistered<RestClient>()) {
+      getIt.registerSingleton(RestClient());
+    }
 
     // dio:---------------------------------------------------------------------
-    getIt.registerSingleton<DioConfigs>(
-      const DioConfigs(
-        baseUrl: Endpoints.baseUrl,
-        connectionTimeout: Endpoints.connectionTimeout,
-        receiveTimeout: Endpoints.receiveTimeout,
-      ),
-    );
-    getIt.registerSingleton<DioClient>(
-      DioClient(dioConfigs: getIt<DioConfigs>())
-        ..addInterceptors(
-          [
-            getIt<AuthInterceptor>(),
-            PrettyDioLogger(
-              requestHeader: true,
-              requestBody: true,
-              responseBody: true,
-              responseHeader: false,
-              error: true,
-              compact: true,
-              maxWidth: 90,
-              enabled: kDebugMode,
-            ),
-            getIt<ErrorInterceptor>(),
-          ],
+    if (!GetIt.I.isRegistered<DioConfigs>()) {
+      getIt.registerSingleton<DioConfigs>(
+        const DioConfigs(
+          baseUrl: Endpoints.baseUrl,
+          connectionTimeout: Endpoints.connectionTimeout,
+          receiveTimeout: Endpoints.receiveTimeout,
         ),
-    );
+      );
+    }
+    if (!GetIt.I.isRegistered<DioClient>()) {
+      getIt.registerSingleton<DioClient>(
+        DioClient(dioConfigs: getIt<DioConfigs>())
+          ..addInterceptors(
+            [
+              getIt<AuthInterceptor>(),
+              PrettyDioLogger(
+                requestHeader: true,
+                requestBody: true,
+                responseBody: true,
+                responseHeader: false,
+                error: true,
+                compact: true,
+                maxWidth: 90,
+                enabled: kDebugMode,
+              ),
+              getIt<ErrorInterceptor>(),
+            ],
+          ),
+      );
+    }
 
     // api's:-------------------------------------------------------------------
-    getIt.registerSingleton(HelpScreenApi(getIt<DioClient>()));
-    getIt.registerSingleton(ClientSessionApi(getIt<DioClient>()));
+    if (!GetIt.I.isRegistered<HelpScreenApi>()) {
+      getIt.registerSingleton(HelpScreenApi(getIt<DioClient>()));
+    }
+    if (!GetIt.I.isRegistered<ClientSessionApi>()) {
+      getIt.registerSingleton(ClientSessionApi(getIt<DioClient>()));
+    }
   }
 }

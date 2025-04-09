@@ -24,10 +24,10 @@ abstract class _HelpScreenStore with Store {
   bool success = false;
 
   @action
-  Future<void> getHelpScreen() async {
+  Future<void> getHelpScreen(String id) async {
     isLoading = true;
     try {
-      final response = await _getHelpScreenUsecase.call(params: '');
+      final response = await _getHelpScreenUsecase.call(params: id);
       helpScreen = response;
       success = true;
     } catch (error) {

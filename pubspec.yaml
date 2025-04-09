@@ -1,6 +1,6 @@
 name: babylai
-description: "A new Flutter package project."
-version: 0.0.1
+description: "A Flutter package that provides integration with BabylAI chat functionality, supporting multiple themes and languages."
+version: 0.0.2
 
 environment:
   sdk: ">=3.5.3 <4.0.0"

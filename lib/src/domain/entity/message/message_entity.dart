@@ -23,7 +23,7 @@ class MessageEntity {
   String get iconName {
     switch (senderType) {
       case SenderType.ai:
-        return Assets.lib.assets.svg.robot;
+        return Assets.lib.assets.svg.logo;
       case SenderType.agent:
         return Assets.lib.assets.svg.person;
       case SenderType.customer:
@@ -32,13 +32,25 @@ class MessageEntity {
   }
 
   // Return the color as a string
+  Color getMessageBubbleColor(BuildContext context) {
+    final customColors = Theme.of(context).extension<CustomColors>()!;
+    switch (senderType) {
+      case SenderType.ai:
+        return Theme.of(context).colorScheme.primaryContainer;
+      case SenderType.agent:
+        return Theme.of(context).colorScheme.primaryContainer;
+      case SenderType.customer:
+        return Theme.of(context).colorScheme.primary;
+    }
+  }
+
   Color getColor(BuildContext context) {
     final customColors = Theme.of(context).extension<CustomColors>()!;
     switch (senderType) {
       case SenderType.ai:
-        return customColors.aiBubble;
+        return Theme.of(context).colorScheme.primary;
       case SenderType.agent:
-        return customColors.agentBubble;
+        return Theme.of(context).colorScheme.primaryContainer;
       case SenderType.customer:
         return customColors.customerBubble;
     }

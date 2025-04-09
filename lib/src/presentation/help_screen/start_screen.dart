@@ -10,6 +10,7 @@ import '../../di/service_locator.dart';
 import '../chat_screen/store/chat_screen_store.dart';
 
 class StartScreen extends StatefulWidget {
+  final String screenId;
   final String locale;
   final ThemeMode? theme;
   final bool directChat;
@@ -17,6 +18,7 @@ class StartScreen extends StatefulWidget {
 
   const StartScreen({
     super.key,
+    required this.screenId,
     required this.locale,
     this.directChat = false,
     this.theme,
@@ -54,7 +56,7 @@ class _StartScreenState extends State<StartScreen> {
       locale: Locale(widget.locale),
       home: widget.directChat
           ? ChatScreen(option: _chatScreenStore.option, directChat: widget.directChat, onBack: widget.onBack)
-          : HelpScreen(onBack: widget.onBack),
+          : HelpScreen(screenId: widget.screenId, onBack: widget.onBack),
     );
   }
 

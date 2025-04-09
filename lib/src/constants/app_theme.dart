@@ -55,28 +55,32 @@ class AppThemeData {
   }
 
   static const ColorScheme lightColorScheme = ColorScheme(
-    primary: Color(0xFF8574EF),
-    primaryContainer: Color(0xFF9e1718),
-    secondary: Color(0xFFEFF3F3),
+    primary: Color(0xFFAD49E2),
+    onPrimary: Colors.white,
+    primaryContainer: Colors.white,
+    onPrimaryContainer: Color(0xFF171717),
+    secondary: Color(0xFFA160C4),
     secondaryContainer: Color(0xFFFAFBFB),
-    surface: Colors.white,
+    surface: Color(0xFFF3F3F3),
+    surfaceBright: Color(0xFFF6ECFC),
     error: _lightFillColor,
     onError: _lightFillColor,
-    onPrimary: _lightFillColor,
     onSecondary: Color(0xFF322942),
     onSurface: Color(0xFF1c1b22),
     surfaceContainer: Color(0xFFf1ecf7),
     onInverseSurface: Color(0xFFf4eff7),
-    outline: Color(0xFF787585),
+    outline: Color(0xFF919191),
+    outlineVariant: Color(0xFF919191),
     brightness: Brightness.light,
   );
 
   static const ColorScheme darkColorScheme = ColorScheme(
-    primary: Color(0xFF8574EF),
+    primary: Color(0xFFAD49E2),
     primaryContainer: Color(0xFF1D1D20),
-    secondary: Color(0xFF222226),
+    secondary: Color(0xFFC57FEA),
     secondaryContainer: Color(0xFF451B6F),
-    surface: Color(0xFF18181B),
+    surface: Color(0xFF171717),
+    surfaceBright: Color(0xFF171717),
     // White with 0.05 opacity
     error: _darkFillColor,
     onError: _darkFillColor,
@@ -85,7 +89,7 @@ class AppThemeData {
     onSurface: _darkFillColor,
     surfaceContainer: Color(0xFF201f26),
     onInverseSurface: Color(0xFF313036),
-    outline: Color(0xFF928e9f),
+    outline: Color(0xFF919191),
     brightness: Brightness.dark,
   );
 
@@ -107,30 +111,30 @@ class AppThemeData {
   static const _bold = FontWeight.w700;
 
   static final TextTheme arTextTheme = TextTheme(
-    headlineMedium: GoogleFonts.rubik(fontWeight: _bold, fontSize: 20.0),
-    bodySmall: GoogleFonts.rubik(fontWeight: _semiBold, fontSize: 16.0),
-    headlineSmall: GoogleFonts.rubik(fontWeight: _medium, fontSize: 16.0),
-    titleMedium: GoogleFonts.rubik(fontWeight: _medium, fontSize: 16.0),
-    labelSmall: GoogleFonts.rubik(fontWeight: _medium, fontSize: 12.0),
-    bodyLarge: GoogleFonts.rubik(fontWeight: _regular, fontSize: 14.0),
-    titleSmall: GoogleFonts.rubik(fontWeight: _medium, fontSize: 14.0),
-    bodyMedium: GoogleFonts.rubik(fontWeight: _regular, fontSize: 16.0),
-    titleLarge: GoogleFonts.rubik(fontWeight: _bold, fontSize: 16.0),
-    labelLarge: GoogleFonts.rubik(fontWeight: _semiBold, fontSize: 14.0),
-    labelMedium: GoogleFonts.rubik(fontWeight: _regular, fontSize: 18.0)
+    headlineMedium: GoogleFonts.cairo(fontWeight: _bold, fontSize: 20.0),
+    bodySmall: GoogleFonts.cairo(fontWeight: _semiBold, fontSize: 16.0),
+    headlineSmall: GoogleFonts.cairo(fontWeight: _medium, fontSize: 16.0),
+    titleMedium: GoogleFonts.cairo(fontWeight: _medium, fontSize: 16.0),
+    labelSmall: GoogleFonts.cairo(fontWeight: _medium, fontSize: 12.0),
+    bodyLarge: GoogleFonts.cairo(fontWeight: _regular, fontSize: 14.0),
+    titleSmall: GoogleFonts.cairo(fontWeight: _medium, fontSize: 14.0),
+    bodyMedium: GoogleFonts.cairo(fontWeight: _regular, fontSize: 16.0),
+    titleLarge: GoogleFonts.cairo(fontWeight: _bold, fontSize: 16.0),
+    labelLarge: GoogleFonts.cairo(fontWeight: _semiBold, fontSize: 14.0),
+    labelMedium: GoogleFonts.cairo(fontWeight: _regular, fontSize: 18.0)
   );
 
   static final TextTheme _textTheme = TextTheme(
-      headlineMedium: GoogleFonts.roboto(fontWeight: _bold, fontSize: 20.0),
-      bodySmall: GoogleFonts.roboto(fontWeight: _semiBold, fontSize: 16.0),
-      headlineSmall: GoogleFonts.roboto(fontWeight: _medium, fontSize: 16.0),
-      titleMedium: GoogleFonts.roboto(fontWeight: _medium, fontSize: 16.0),
-      labelSmall: GoogleFonts.roboto(fontWeight: _medium, fontSize: 12.0),
-      bodyLarge: GoogleFonts.roboto(fontWeight: _regular, fontSize: 14.0),
-      titleSmall: GoogleFonts.roboto(fontWeight: _medium, fontSize: 14.0),
-      bodyMedium: GoogleFonts.roboto(fontWeight: _regular, fontSize: 16.0),
-      titleLarge: GoogleFonts.roboto(fontWeight: _bold, fontSize: 16.0),
-      labelLarge: GoogleFonts.roboto(fontWeight: _semiBold, fontSize: 14.0),
-      labelMedium: GoogleFonts.roboto(fontWeight: _regular, fontSize: 18.0)
+      headlineMedium: GoogleFonts.cairo(fontWeight: _bold, fontSize: 20.0),
+      bodySmall: GoogleFonts.cairo(fontWeight: _semiBold, fontSize: 16.0),
+      headlineSmall: GoogleFonts.cairo(fontWeight: _medium, fontSize: 16.0),
+      titleMedium: GoogleFonts.cairo(fontWeight: _medium, fontSize: 16.0),
+      labelSmall: GoogleFonts.cairo(fontWeight: _medium, fontSize: 12.0),
+      bodyLarge: GoogleFonts.cairo(fontWeight: _regular, fontSize: 14.0),
+      titleSmall: GoogleFonts.cairo(fontWeight: _medium, fontSize: 14.0),
+      bodyMedium: GoogleFonts.cairo(fontWeight: _regular, fontSize: 16.0),
+      titleLarge: GoogleFonts.cairo(fontWeight: _bold, fontSize: 16.0),
+      labelLarge: GoogleFonts.cairo(fontWeight: _semiBold, fontSize: 14.0),
+      labelMedium: GoogleFonts.cairo(fontWeight: _regular, fontSize: 18.0)
   );
 }

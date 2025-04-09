@@ -52,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _chatScreenStore.dispose();
       if (_chatScreenStore.messages.length == 0) {
         Future.delayed(Duration(seconds: 1), () {
-          final welcomeMessage = widget.option.assistant.greeting;
+          final welcomeMessage = widget.option.assistant?.greeting ?? '';
           _chatScreenStore.insertMessage(
               welcomeMessage, SenderType.ai, false, false);
         });
@@ -65,31 +65,52 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PrimaryAppBar(
+      appBar: UpdatedPrimaryAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: widget.option.title,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            if (widget.directChat) {
-              widget.onBack();
-            } else {
-              Navigator.of(context).pop();
-            }
-          },
+        leading: Container(
+          margin: const EdgeInsets.all(12),
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+            ),
+            icon: const Icon(Icons.arrow_back, size: 20),
+            onPressed: () {
+              if (widget.directChat) {
+                widget.onBack();
+              } else {
+                Navigator.of(context).pop();
+              }
+            },
+          ),
         ),
         actions: [
           Observer(
               builder: (_) => _chatScreenStore.sessionEntity == null
                   ? SizedBox.shrink()
-                  : TextButton(
-                      onPressed: () {
-                        showEndChatAlert();
-                      },
-                      child: Text(
-                        context.localizations.end_chat,
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: Colors.red, fontWeight: FontWeight.w800),
-                      )))
+                  : Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: SizedBox(
+                        width: 32,
+                        height: 32,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.white),
+                          ),
+                          icon: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child:
+                                SvgPicture.asset(Assets.lib.assets.svg.close),
+                          ),
+                          onPressed: () {
+                            showEndChatAlert();
+                          },
+                        ),
+                      ),
+                    ))
         ],
       ),
       body: SafeArea(
@@ -146,14 +167,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: Container(
                     alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.onInverseSurface,
-                      borderRadius: BorderRadius.circular(16),
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(48),
                     ),
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(
-                        minHeight: 55, // Minimum height
+                        minHeight: 58, // Minimum height
                         maxHeight: 150, // Maximum height
                       ),
                       child: TextField(
@@ -185,7 +207,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     icon: Transform.flip(
                       flipX: AppLocalizations.of(context)!.localeName == 'ar',
                       child: SvgPicture.asset(
-                        Assets.lib.assets.svg.send,
+                        Assets.lib.assets.svg.sendArrow,
                         color: isThinking
                             ? Theme.of(context).colorScheme.outline
                             : Colors.white,

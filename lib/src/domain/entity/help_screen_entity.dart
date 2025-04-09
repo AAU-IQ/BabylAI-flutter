@@ -7,7 +7,7 @@ class HelpScreenEntity {
   final String id;
   final String tenantId;
   final String title;
-  final String description;
+  final String? description;
   final List<Option> options;
 
   HelpScreenEntity({
@@ -81,7 +81,7 @@ class Option {
   final String id;
   final String helpScreenId;
   final String? parentOptionId;
-  final Assistant assistant;
+  final Assistant? assistant;
   final String title;
   final List<String> paragraphs;
 
