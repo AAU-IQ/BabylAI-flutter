@@ -50,7 +50,7 @@ First, configure BabylAI in your app's initialization and set up the token callb
 ```dart
 void main() {
   // Configure BabylAI
-  BabylAI.configure();
+  BabylAI.configure('HELP_SCREEN_ID');
   
   // IMPORTANT: You MUST set up a token callback for the package to work
   BabylAI.setTokenCallback(() async {
