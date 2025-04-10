@@ -14,6 +14,35 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Special case for agent divider
+    if (message.text == "agent_divider") {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Divider(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                thickness: 1,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: SvgPicture.asset(Assets.lib.assets.svg.star,
+                colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.primary.withOpacity(0.8), BlendMode.srcIn),
+              )
+            ),
+            Expanded(
+              child: Divider(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                thickness: 1,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     if (message.text == "thinking" && message.senderType == SenderType.ai) {
       return Directionality(
         textDirection: TextDirection.ltr,
@@ -51,113 +80,112 @@ class MessageBubble extends StatelessWidget {
           textDirection: TextDirection.ltr, // Enforce LTR layout
           child: isUser
               ? Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(
-                    vertical: 4, horizontal: 16),
-                padding: const EdgeInsets.all(12),
-                constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.75),
-                decoration: BoxDecoration(
-                  color: message.getMessageBubbleColor(context),
-                  borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(16),
-                    topRight: const Radius.circular(16),
-                    bottomLeft: const Radius.circular(16),
-                    bottomRight: const Radius.circular(16),
-                  ),
-                ),
-                child: Text(
-                  message.text,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 14),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  Intl.DateFormat('hh:mm a').format(message.time),
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      fontSize: 10,
-                      color: Theme.of(context).hintColor),
-                ),
-              )
-            ],
-          )
-              : Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 4, left: 16),
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(7.0),
-                    child: SvgPicture.asset(
-                      message.iconName,
-                    ),
-                  ),
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: message.getColor(context),
-                  ),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 4, horizontal: 10),
-                    padding: const EdgeInsets.all(12),
-                    constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width *
-                            0.75),
-                    decoration: BoxDecoration(
-                      color: message.getMessageBubbleColor(context),
-                      borderRadius: BorderRadius.all(Radius.circular(24))
-                    ),
-                    child: message.senderType == SenderType.agent
-                        ? Text(
-                      message.text,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium
-                          ?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface,
-                          fontSize: 14),
-                    )
-                        : Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: MarkdownBody(
-                                                data: message.text,
-                                              ),
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 16),
+                      padding: const EdgeInsets.all(12),
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.75),
+                      decoration: BoxDecoration(
+                        color: message.getMessageBubbleColor(context),
+                        borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(16),
+                          topRight: const Radius.circular(16),
+                          bottomLeft: const Radius.circular(16),
+                          bottomRight: const Radius.circular(16),
                         ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      Intl.DateFormat('hh:mm a').format(message.time),
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelSmall
-                          ?.copyWith(
-                          fontSize: 10,
-                          color: Theme.of(context).hintColor),
+                      ),
+                      child: Text(
+                        message.text,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium
+                            ?.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                                fontSize: 14),
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ],
-          ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        Intl.DateFormat('hh:mm a').format(message.time),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            fontSize: 10, color: Theme.of(context).hintColor),
+                      ),
+                    )
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4, left: 16),
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(7.0),
+                          child: SvgPicture.asset(
+                            message.iconName,
+                          ),
+                        ),
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: message.getColor(context),
+                        ),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 10),
+                          padding: const EdgeInsets.all(12),
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  MediaQuery.of(context).size.width * 0.75),
+                          decoration: BoxDecoration(
+                              color: message.getMessageBubbleColor(context),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(24))),
+                          child: message.senderType == SenderType.agent
+                              ? Text(
+                                  message.text,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium
+                                      ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
+                                          fontSize: 14),
+                                )
+                              : Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: MarkdownBody(
+                                    data: message.text,
+                                  ),
+                                ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            Intl.DateFormat('hh:mm a').format(message.time),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(
+                                    fontSize: 10,
+                                    color: Theme.of(context).hintColor),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
         ),
       ),
     );

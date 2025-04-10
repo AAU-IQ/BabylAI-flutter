@@ -55,6 +55,9 @@ abstract class _ChatScreenStore with Store {
   @observable
   bool isChatActive = true;
 
+  @observable
+  bool agentDividerShown = false;
+
   Function(String)? onMessageReceivedCallback;
 
   // disposers:-----------------------------------------------------------------
@@ -77,8 +80,23 @@ abstract class _ChatScreenStore with Store {
         isThinking = false;
       }
 
-      if (!isManagedByAgent) {
-        isManagedByAgent = msg.needsAgent || msg.senderType == SenderType.agent;
+      // Check if this is the first agent message and we need to show the divider
+      if (!isManagedByAgent &&
+          (msg.needsAgent || msg.senderType == SenderType.agent)) {
+        isManagedByAgent = true;
+
+        // Insert a special divider message before the agent's message
+        if (!agentDividerShown) {
+          messages.insert(
+              0,
+              MessageEntity(
+                text: "agent_divider",
+                senderType: SenderType.ai,
+                needsAgent: false,
+                isSentByUser: false,
+              ));
+          agentDividerShown = true;
+        }
       }
 
       // Add the actual AI response
@@ -229,5 +247,6 @@ abstract class _ChatScreenStore with Store {
     isThinking = false;
     success = false;
     isSessionClosed = false;
+    agentDividerShown = false;
   }
 }

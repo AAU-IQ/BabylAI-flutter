@@ -86,6 +86,9 @@ class $LibAssetsSvgGen {
   /// File path: lib/assets/svg/send.svg
   String get send => 'packages/babylai/lib/assets/svg/send.svg';
 
+  /// File path: lib/assets/svg/star.svg
+  String get star => 'packages/babylai/lib/assets/svg/star.svg';
+
   /// List of all assets
   List<String> get values => [
         arrowBroken,
@@ -98,7 +101,8 @@ class $LibAssetsSvgGen {
         person,
         robot,
         sendArrow,
-        send
+        send,
+        star
       ];
 }
 

@@ -137,6 +137,22 @@ mixin _$ChatScreenStore on _ChatScreenStore, Store {
     });
   }
 
+  late final _$agentDividerShownAtom =
+      Atom(name: '_ChatScreenStore.agentDividerShown', context: context);
+
+  @override
+  bool get agentDividerShown {
+    _$agentDividerShownAtom.reportRead();
+    return super.agentDividerShown;
+  }
+
+  @override
+  set agentDividerShown(bool value) {
+    _$agentDividerShownAtom.reportWrite(value, super.agentDividerShown, () {
+      super.agentDividerShown = value;
+    });
+  }
+
   late final _$initSignalRServiceAsyncAction =
       AsyncAction('_ChatScreenStore.initSignalRService', context: context);
 
@@ -200,7 +216,8 @@ isManagedByAgent: ${isManagedByAgent},
 isThinking: ${isThinking},
 success: ${success},
 isSessionClosed: ${isSessionClosed},
-isChatActive: ${isChatActive}
+isChatActive: ${isChatActive},
+agentDividerShown: ${agentDividerShown}
     ''';
   }
 }
