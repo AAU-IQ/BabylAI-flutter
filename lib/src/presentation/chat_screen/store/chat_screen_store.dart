@@ -6,7 +6,7 @@ import 'package:babylai/src/domain/entity/session/session_entity.dart';
 import 'package:mobx/mobx.dart';
 import '../../../data/sharedpref/SharedPreferenceHelper.dart';
 import '../../../domain/entity/message/message_entity.dart';
-import '../../../services/signalr_service.dart';
+import '../../../services/ably_service.dart';
 
 part 'chat_screen_store.g.dart';
 
@@ -17,7 +17,7 @@ abstract class _ChatScreenStore with Store {
       this._createSessionUsecase,
       this._sendMessageUsecase,
       this._closeSessionUsecase,
-      this._signalRService,
+      this._ablyService,
       this._sharedPreferenceHelper) {
     _setupDisposers();
   }
@@ -26,7 +26,7 @@ abstract class _ChatScreenStore with Store {
   final CreateSessionUsecase _createSessionUsecase;
   final SendMessageUsecase _sendMessageUsecase;
   final CloseSessionUsecase _closeSessionUsecase;
-  final SignalRService _signalRService;
+  final AblyService _ablyService;
   final SharedPreferenceHelper _sharedPreferenceHelper;
 
   late Option option;
@@ -70,9 +70,9 @@ abstract class _ChatScreenStore with Store {
   }
 
   @action
-  Future<void> initSignalRService(Option selectedOption) async {
+  Future<void> initAblyService(Option selectedOption) async {
     option = selectedOption;
-    _signalRService.setOnMessageReceivedCallback((msg) {
+    _ablyService.setOnMessageReceivedCallback((msg) {
       // Remove the "AI is thinking" bubble
       if (isThinking) {
         messages.removeWhere((message) =>
@@ -107,16 +107,7 @@ abstract class _ChatScreenStore with Store {
       }
     });
 
-    _signalRService.setOnErrorCallback((error) {
-      print('SignalR Error: $error');
-    });
-
-    final token = await _sharedPreferenceHelper.authToken;
-    if (token != null && token.isNotEmpty) {
-      _signalRService.initializeConnection(token);
-    } else {
-      print('No token found');
-    }
+    _ablyService.setOnErrorCallback((error) {});
   }
 
   @action
@@ -161,14 +152,15 @@ abstract class _ChatScreenStore with Store {
     try {
       // Send the message to the backend if the session exists
       if (sessionEntity != null) {
-        if (_signalRService.isConnected()) {
+        if (_ablyService.isConnected()) {
           await _sendMessageUsecase.call(
             params:
                 SendMessageParams(content: msg, sessionId: sessionEntity!.id),
           );
         } else {
-          await _signalRService.startConnection();
-          await _signalRService.joinGroup(sessionEntity!.id);
+          await _ablyService.startConnection();
+          await _ablyService.joinGroup(
+              sessionEntity!.tenant!.id, sessionEntity!.id);
           await _sendMessageUsecase.call(
             params:
                 SendMessageParams(content: msg, sessionId: sessionEntity!.id),
@@ -176,7 +168,7 @@ abstract class _ChatScreenStore with Store {
         }
       }
     } catch (error) {
-      print("Error in sendMessage: $error");
+      throw Exception("Error in sendMessage: $error");
     }
   }
 
@@ -190,15 +182,21 @@ abstract class _ChatScreenStore with Store {
       final params = CreateSessionParams(
           helpScreenId: option.helpScreenId, optionId: option.id);
       final response = await _createSessionUsecase.call(params: params);
-      sessionEntity = response;
+      sessionEntity = response.session;
 
-      // Start the SignalR connection
-      await _signalRService.startConnection();
+      if (response.ablyToken.isNotEmpty) {
+        _ablyService.initializeConnection(response.ablyToken);
+      } else {
+        throw Exception('No token found');
+      }
+
+      // Start the Ably connection
+      await _ablyService.startConnection();
 
       // Join the group
       if (sessionEntity != null) {
-        final id = sessionEntity!.id;
-        await _signalRService.joinGroup(id);
+        await _ablyService.joinGroup(
+            sessionEntity!.tenant!.id, sessionEntity!.id);
       }
 
       // After connection is established and group joined, send the message
@@ -227,7 +225,7 @@ abstract class _ChatScreenStore with Store {
 
   void cleanUp() {
     sessionEntity = null;
-    _signalRService.stopConnection();
+    _ablyService.stopConnection();
     insertMessage(option.assistant?.closing ?? '', SenderType.ai, false, false);
     isSessionClosed = true;
     _sharedPreferenceHelper.removeAuthToken();

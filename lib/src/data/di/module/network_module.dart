@@ -39,7 +39,6 @@ class NetworkModule {
     if (!GetIt.I.isRegistered<DioConfigs>()) {
       getIt.registerSingleton<DioConfigs>(
         const DioConfigs(
-          baseUrl: Endpoints.baseUrl,
           connectionTimeout: Endpoints.connectionTimeout,
           receiveTimeout: Endpoints.receiveTimeout,
         ),

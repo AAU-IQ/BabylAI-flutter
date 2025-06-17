@@ -153,13 +153,13 @@ mixin _$ChatScreenStore on _ChatScreenStore, Store {
     });
   }
 
-  late final _$initSignalRServiceAsyncAction =
-      AsyncAction('_ChatScreenStore.initSignalRService', context: context);
+  late final _$initAblyServiceAsyncAction =
+      AsyncAction('_ChatScreenStore.initAblyService', context: context);
 
   @override
-  Future<void> initSignalRService(Option selectedOption) {
-    return _$initSignalRServiceAsyncAction
-        .run(() => super.initSignalRService(selectedOption));
+  Future<void> initAblyService(Option selectedOption) {
+    return _$initAblyServiceAsyncAction
+        .run(() => super.initAblyService(selectedOption));
   }
 
   late final _$sendMessageAsyncAction =

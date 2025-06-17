@@ -31,8 +31,6 @@ class BabylAI {
       try {
         return await _tokenCallback!();
       } catch (e) {
-        print('Error getting token: $e');
-        // Don't throw an error here, just return null
         return null;
       }
     }
@@ -49,10 +47,10 @@ class BabylAI {
       if (token != null && token.isNotEmpty) {
         _storeToken(token);
       } else {
-        print('Warning: Failed to get a valid token during initialization');
+        throw Exception('No token callback provided');
       }
     } catch (error) {
-      print('Error injecting dependencies: $error');
+      throw Exception('Error injecting dependencies: $error');
     }
   }
 
@@ -60,7 +58,7 @@ class BabylAI {
     if (token != null && token.isNotEmpty) {
       getIt<SharedPreferenceHelper>().saveAuthToken(token);
     } else {
-      print('Warning: Attempted to store null or empty token');
+      throw Exception('Attempted to store null or empty token');
     }
   }
 

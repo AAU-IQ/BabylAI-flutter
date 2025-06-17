@@ -57,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
               welcomeMessage, SenderType.ai, false, false);
         });
       }
-      _chatScreenStore.initSignalRService(widget.option);
+      _chatScreenStore.initAblyService(widget.option);
       _chatScreenStore.isChatActive = true;
     }
   }

@@ -8,14 +8,16 @@ class HelpScreenEntity {
   final String tenantId;
   final String title;
   final String? description;
-  final List<Option> options;
+  final bool? chatWithUs;
+  final List<Option>? options;
 
   HelpScreenEntity({
     required this.id,
     required this.tenantId,
     required this.title,
-    required this.description,
-    required this.options,
+    this.description,
+    this.chatWithUs,
+    this.options,
   });
 
   factory HelpScreenEntity.fromJson(Map<String, dynamic> json) =>
@@ -29,13 +31,13 @@ class Tenant {
   final String id;
   final String name;
   final String key;
-  final List<ApiKey> apiKeys;
+  final List<ApiKey>? apiKeys;
 
   Tenant({
     required this.id,
     required this.name,
     required this.key,
-    required this.apiKeys,
+    this.apiKeys,
   });
 
   factory Tenant.fromJson(Map<String, dynamic> json) => _$TenantFromJson(json);
@@ -84,14 +86,18 @@ class Option {
   final Assistant? assistant;
   final String title;
   final List<String> paragraphs;
+  final List<dynamic>? files;
+  final bool? chatWithUs;
 
   Option({
     required this.id,
     required this.helpScreenId,
     this.parentOptionId,
-    required this.assistant,
+    this.assistant,
     required this.title,
     required this.paragraphs,
+    this.files,
+    this.chatWithUs,
   });
 
   factory Option.fromJson(Map<String, dynamic> json) => _$OptionFromJson(json);
@@ -103,18 +109,22 @@ class Option {
 class Assistant {
   final String id;
   final String tenantId;
+  final Tenant? tenant;
   final String name;
   final String openAIAssistantId;
   final String greeting;
   final String closing;
+  final int? limit;
 
   Assistant({
     required this.id,
     required this.tenantId,
+    this.tenant,
     required this.name,
     required this.openAIAssistantId,
     required this.greeting,
     required this.closing,
+    this.limit,
   });
 
   factory Assistant.fromJson(Map<String, dynamic> json) =>

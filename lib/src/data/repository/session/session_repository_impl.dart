@@ -5,13 +5,12 @@ import '../../../domain/entity/message/sender_message_entity.dart';
 import '../../../domain/entity/session/session_entity.dart';
 
 class SessionRepositoryImpl extends SessionRepository {
-
   final ClientSessionApi _clientSessionApi;
 
   SessionRepositoryImpl(this._clientSessionApi);
 
   @override
-  Future<SessionEntity> createSession(String helpScreenId, String optionId) {
+  Future<RootEntity> createSession(String helpScreenId, String optionId) {
     return _clientSessionApi.createSession(helpScreenId, optionId);
   }
 
@@ -24,5 +23,4 @@ class SessionRepositoryImpl extends SessionRepository {
   Future<int> closeSession(String sessionId) {
     return _clientSessionApi.closeSession(sessionId);
   }
-
 }

@@ -1,0 +1,2 @@
+/Users/ahmedraad/Desktop/asl/babylai/example/android/app/.cxx/Debug/5cg1w531/x86_64/CMakeFiles/edit_cache.dir
+/Users/ahmedraad/Desktop/asl/babylai/example/android/app/.cxx/Debug/5cg1w531/x86_64/CMakeFiles/rebuild_cache.dir

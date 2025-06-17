@@ -16,13 +16,11 @@ class ErrorInterceptor extends Interceptor {
         (err.response!.statusCode == 401 || err.response!.statusCode == 403)) {
       try {
         // Get a fresh token
-        print('Token expired, attempting to refresh...');
         final token = await BabylAI.getToken();
 
         if (token != null && token.isNotEmpty) {
           // Save the new token
           _sharedPreferenceHelper.saveAuthToken(token);
-          print('Token refreshed successfully');
 
           // Create a new Dio instance for the retry
           // This avoids circular dependency issues
@@ -45,7 +43,6 @@ class ErrorInterceptor extends Interceptor {
           );
 
           // Retry the original request with the new token
-          print('Retrying original request with new token...');
           final response = await retryDio.request(
             err.requestOptions.path,
             data: err.requestOptions.data,
@@ -54,13 +51,10 @@ class ErrorInterceptor extends Interceptor {
           );
 
           // If retry is successful, return the response
-          print('Request retry successful');
           return handler.resolve(response);
-        } else {
-          print('Failed to refresh token, continuing with error');
-        }
+        } else {}
       } catch (e) {
-        print('Error during token refresh and retry: $e');
+        throw Exception('Error during token refresh and retry: $e');
       }
     }
 

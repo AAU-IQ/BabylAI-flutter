@@ -186,12 +186,12 @@ class _HelpScreenState extends State<HelpScreen> {
 
   Widget _buildList() {
     return ListView.separated(
-      itemCount: _helpScreenStore.helpScreen?.options.length ?? 0,
+      itemCount: _helpScreenStore.helpScreen?.options?.length ?? 0,
       separatorBuilder: (context, index) => SizedBox(
         height: 0,
       ),
       itemBuilder: (context, index) {
-        final option = _helpScreenStore.helpScreen?.options[index];
+        final option = _helpScreenStore.helpScreen?.options?[index];
         if (option != null) {
           return HelpOptionCard(
               option: option,

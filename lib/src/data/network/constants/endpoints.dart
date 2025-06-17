@@ -3,7 +3,9 @@ class Endpoints {
 
   // base url
   static const String baseUrl = "https://babylai.net/api/";
-  static const String signalRBaseUrl = "https://babylai.net/clientHub";
+
+  static const String devBaseUrl =
+      "https://be.babylai.dev.ostk.creativeadvtech.ml/";
 
   // receiveTimeout
   static const int receiveTimeout = 15000;
@@ -12,9 +14,10 @@ class Endpoints {
   static const int connectionTimeout = 30000;
 
   // endpoints
-  static const String getScreen = baseUrl + "Client/ClientHelpScreen";
+  static const String getScreen = devBaseUrl + "Client/ClientHelpScreen";
 
-  static const String createSession = baseUrl + "Client/ClientChatSession/create-session";
+  static const String createSession =
+      devBaseUrl + "Client/ClientChatSession/create-session";
 
   static String sendMessage(String sessionId) {
     return "Client/ClientChatSession/$sessionId/send-message";
@@ -27,5 +30,4 @@ class Endpoints {
   static String closeSession(String sessionId) {
     return "Client/ClientChatSession/$sessionId/close";
   }
-
 }

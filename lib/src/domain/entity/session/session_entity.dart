@@ -1,6 +1,25 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../help_screen_entity.dart';
+
 part 'session_entity.g.dart';
+
+@JsonSerializable(explicitToJson: true)
+class RootEntity {
+  @JsonKey(name: 'chatSession')
+  final SessionEntity session;
+  final String ablyToken;
+
+  RootEntity({
+    required this.session,
+    required this.ablyToken,
+  });
+
+  factory RootEntity.fromJson(Map<String, dynamic> json) =>
+      _$RootEntityFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RootEntityToJson(this);
+}
 
 @JsonSerializable(explicitToJson: true)
 class SessionEntity {
@@ -10,10 +29,12 @@ class SessionEntity {
   final String? assignedAgentId;
   final String? jumpedInByAgentId;
   final String tenantId;
-  final String assistantId;
+  final String? assistantId;
   final String? threadId;
-  final String helpScreenId;
-  final String optionId;
+  final String? helpScreenId;
+  final HelpScreenEntity? helpScreen;
+  final String? optionId;
+  final Option? option;
   final int status;
   final String createdAt;
   final String? closedAt;
@@ -25,23 +46,30 @@ class SessionEntity {
   final String? escalatedAt;
   final String? assignedAt;
   final String? jumpedInAt;
-  final List<String> tags;
+  final int? channel;
+  final dynamic externalId;
+  final List<dynamic> tags;
   final dynamic agent;
   final dynamic jumpedInByAgent;
   final dynamic closedByUser;
+  final Tenant? tenant;
+  final Assistant? assistant;
   final List<dynamic> messages;
+  final dynamic review;
 
   SessionEntity({
     required this.id,
     required this.customerId,
-    required this.user,
+    this.user,
     this.assignedAgentId,
     this.jumpedInByAgentId,
     required this.tenantId,
-    required this.assistantId,
+    this.assistantId,
     this.threadId,
-    required this.helpScreenId,
-    required this.optionId,
+    this.helpScreenId,
+    this.helpScreen,
+    this.optionId,
+    this.option,
     required this.status,
     required this.createdAt,
     this.closedAt,
@@ -53,11 +81,16 @@ class SessionEntity {
     this.escalatedAt,
     this.assignedAt,
     this.jumpedInAt,
+    this.channel,
+    this.externalId,
     required this.tags,
     this.agent,
     this.jumpedInByAgent,
     this.closedByUser,
+    this.tenant,
+    this.assistant,
     required this.messages,
+    this.review,
   });
 
   factory SessionEntity.fromJson(Map<String, dynamic> json) =>

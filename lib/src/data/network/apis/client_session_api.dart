@@ -1,4 +1,3 @@
-
 import 'package:babylai/src/domain/entity/message/sender_message_entity.dart';
 import 'package:babylai/src/domain/entity/session/session_entity.dart';
 
@@ -12,29 +11,27 @@ class ClientSessionApi {
   // injecting dio instance
   ClientSessionApi(this._dioClient);
 
-
-  Future<SessionEntity> createSession(String helpScreenId, String optionId) async {
+  Future<RootEntity> createSession(String helpScreenId, String optionId) async {
     try {
       final res = await _dioClient.dio.post(
-          Endpoints.createSession,
-          data: {
-            "helpScreenId": helpScreenId,
-            "optionId": optionId,
-          },
+        Endpoints.createSession,
+        data: {
+          'helpScreenId': helpScreenId,
+          'optionId': optionId,
+        },
       );
-      return SessionEntity.fromJson(res.data);
+      return RootEntity.fromJson(res.data);
     } catch (e) {
       print(e.toString());
       throw e;
     }
   }
 
-  Future<SenderMessageEntity> sendMessage(String content, String sessionId) async {
+  Future<SenderMessageEntity> sendMessage(
+      String content, String sessionId) async {
     try {
-      final res = await _dioClient.dio.post(
-        Endpoints.sendMessage(sessionId),
-        data: {"messageContent": content}
-      );
+      final res = await _dioClient.dio.post(Endpoints.sendMessage(sessionId),
+          data: {"messageContent": content});
       return SenderMessageEntity.fromJson(res.data);
     } catch (e) {
       print(e.toString());
@@ -53,5 +50,4 @@ class ClientSessionApi {
       throw e;
     }
   }
-
 }

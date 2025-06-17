@@ -33,8 +33,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<String> getToken() async {
-    final url =
-        Uri.parse('https://babylai.net/api/Auth/client/get-babylai-token');
+    final url = Uri.parse('https://be.babylai.dev.ostk.creativeadvtech.ml/Auth/client/get-token');
     final HttpClient httpClient = HttpClient();
 
     try {
@@ -43,6 +42,13 @@ class _MyAppState extends State<MyApp> {
 
       // Set headers
       request.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
+
+      final body = jsonEncode({
+        'apiKey': 'kqR7Uq8a7c+3wd9GvKLJihLKOMoi5n2lMsTKrQMG6+0=',
+        'tenantId': '4d61527f-f963-4558-b242-22d3bc433a22',
+      });
+
+      request.write(body);
 
       // Send request and get response
       HttpClientResponse response = await request.close();
@@ -68,7 +74,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    BabylAI.configure();
+    BabylAI.configure('57949b38-1a7b-4ca6-a137-6c04848dd67f');
     BabylAI.setTokenCallback(() async {
       return await getToken();
     });
