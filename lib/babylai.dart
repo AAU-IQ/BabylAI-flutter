@@ -144,7 +144,9 @@ class BabylAI {
     );
 
     _chatScreenStore.onMessageReceivedCallback = (message) {
-      _onMessageReceived?.call(message);
+      if (!_chatScreenStore.isChatActive) {
+        _onMessageReceived?.call(message);
+      }
     };
   }
 }

@@ -48,6 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void initMessenger() {
+    _chatScreenStore.isChatActive = true;
     if (_chatScreenStore.sessionEntity == null) {
       _chatScreenStore.dispose();
       if (_chatScreenStore.messages.length == 0) {
@@ -58,7 +59,6 @@ class _ChatScreenState extends State<ChatScreen> {
         });
       }
       _chatScreenStore.initAblyService(widget.option);
-      _chatScreenStore.isChatActive = true;
     }
   }
 
