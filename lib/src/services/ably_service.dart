@@ -91,7 +91,8 @@ class AblyService {
       if (message.name == 'ReceiveMessage') {
         try {
           final parsedMessage = parseMessage(message.data);
-          _onMessageReceived?.call(parsedMessage);
+          if(!parsedMessage.isSentByUser)
+            _onMessageReceived?.call(parsedMessage);
         } catch (e) {
           _onError?.call("Failed to parse message: $e");
         }
