@@ -5,7 +5,7 @@ class Endpoints {
   static const String baseUrl = "https://babylai.net/api/";
 
   static const String devBaseUrl =
-      "https://be.babylai.dev.ostk.creativeadvtech.ml/";
+      "https://babylai-be.dev.kvm.creativeadvtech.ml/";
 
   // receiveTimeout
   static const int receiveTimeout = 15000;

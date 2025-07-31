@@ -50,7 +50,7 @@ SessionEntity _$SessionEntityFromJson(Map<String, dynamic> json) =>
       jumpedInAt: json['jumpedInAt'] as String?,
       channel: (json['channel'] as num?)?.toInt(),
       externalId: json['externalId'],
-      tags: json['tags'] as List<dynamic>,
+      tags: json['tags'] as List<dynamic>?,
       agent: json['agent'],
       jumpedInByAgent: json['jumpedInByAgent'],
       closedByUser: json['closedByUser'],

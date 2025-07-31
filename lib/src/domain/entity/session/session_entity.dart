@@ -48,7 +48,7 @@ class SessionEntity {
   final String? jumpedInAt;
   final int? channel;
   final dynamic externalId;
-  final List<dynamic> tags;
+  final List<dynamic>? tags;
   final dynamic agent;
   final dynamic jumpedInByAgent;
   final dynamic closedByUser;

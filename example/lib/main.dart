@@ -33,7 +33,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<String> getToken() async {
-    final url = Uri.parse('https://be.babylai.dev.ostk.creativeadvtech.ml/Auth/client/get-token');
+    final url = Uri.parse('https://babylai-be.dev.kvm.creativeadvtech.ml/Auth/client/get-token');
     final HttpClient httpClient = HttpClient();
 
     try {
