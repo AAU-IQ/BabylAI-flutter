@@ -15,6 +15,7 @@ class StartScreen extends StatefulWidget {
   final ThemeMode? theme;
   final bool directChat;
   final VoidCallback onBack;
+  final Map<String, dynamic> userInfo;
 
   const StartScreen({
     super.key,
@@ -22,7 +23,8 @@ class StartScreen extends StatefulWidget {
     required this.locale,
     this.directChat = false,
     this.theme,
-    required this.onBack
+    required this.onBack,
+    required this.userInfo,
   });
 
   @override
@@ -30,7 +32,6 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-
   final _noScreenshot = NoScreenshot.instance;
   final ChatScreenStore _chatScreenStore = getIt<ChatScreenStore>();
 
@@ -55,9 +56,15 @@ class _StartScreenState extends State<StartScreen> {
       supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(widget.locale),
       home: widget.directChat
-          ? ChatScreen(option: _chatScreenStore.option, directChat: widget.directChat, onBack: widget.onBack)
-          : HelpScreen(screenId: widget.screenId, onBack: widget.onBack),
+          ? ChatScreen(
+              option: _chatScreenStore.option,
+              directChat: widget.directChat,
+              onBack: widget.onBack,
+              userInfo: widget.userInfo)
+          : HelpScreen(
+              screenId: widget.screenId,
+              onBack: widget.onBack,
+              userInfo: widget.userInfo),
     );
   }
-
 }

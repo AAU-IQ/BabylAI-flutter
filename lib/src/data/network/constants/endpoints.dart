@@ -1,23 +1,22 @@
+import '../../../core/config/environment_service.dart';
+
 class Endpoints {
   Endpoints._();
 
-  // base url
-  static const String baseUrl = "https://babylai.net/api/";
-
-  static const String devBaseUrl =
-      "https://babylai-be.dev.kvm.creativeadvtech.ml/";
-
   // receiveTimeout
-  static const int receiveTimeout = 15000;
+  static int get receiveTimeout => EnvironmentService.receiveTimeout;
 
   // connectTimeout
-  static const int connectionTimeout = 30000;
+  static int get connectionTimeout => EnvironmentService.connectionTimeout;
+
+  // base url - dynamically retrieved from environment service
+  static String get baseUrl => EnvironmentService.baseUrl;
 
   // endpoints
-  static const String getScreen = devBaseUrl + "Client/ClientHelpScreen";
+  static String get getScreen => "${baseUrl}Client/ClientHelpScreen";
 
-  static const String createSession =
-      devBaseUrl + "Client/ClientChatSession/create-session";
+  static String get createSession =>
+      "${baseUrl}Client/ClientChatSession/create-session";
 
   static String sendMessage(String sessionId) {
     return "Client/ClientChatSession/$sessionId/send-message";

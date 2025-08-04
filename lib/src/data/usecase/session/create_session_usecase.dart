@@ -11,16 +11,18 @@ class CreateSessionUsecase extends UseCase<RootEntity, CreateSessionParams> {
   @override
   Future<RootEntity> call({required CreateSessionParams params}) {
     return _sessionRepository.createSession(
-        params.helpScreenId, params.optionId);
+        params.helpScreenId, params.optionId, params.user);
   }
 }
 
 class CreateSessionParams {
   final String helpScreenId;
   final String optionId;
+  final Map<String, dynamic> user;
 
   CreateSessionParams({
     required this.helpScreenId,
     required this.optionId,
+    required this.user,
   });
 }

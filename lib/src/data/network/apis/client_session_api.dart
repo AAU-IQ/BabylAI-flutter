@@ -11,13 +11,15 @@ class ClientSessionApi {
   // injecting dio instance
   ClientSessionApi(this._dioClient);
 
-  Future<RootEntity> createSession(String helpScreenId, String optionId) async {
+  Future<RootEntity> createSession(
+      String helpScreenId, String optionId, Map<String, dynamic> user) async {
     try {
       final res = await _dioClient.dio.post(
         Endpoints.createSession,
         data: {
           'helpScreenId': helpScreenId,
           'optionId': optionId,
+          'user': user,
         },
       );
       return RootEntity.fromJson(res.data);

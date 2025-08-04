@@ -26,6 +26,8 @@ A Flutter package that provides integration with BabylAI chat functionality, sup
 - 🌍 Multilingual support (English and Arabic)
 - 📬 Message receiving callback for custom notification handling
 - ⚡ Quick access to active chats
+- 🏗️ Environment-based configuration (Production/Development)
+- 🔒 Secure, predefined API endpoints
 
 ## Installation
 
@@ -43,28 +45,60 @@ If the repository requires authentication, you'll need to configure your Git cre
 
 ## Usage
 
-### 1. Initialize BabylAI and Set Token Callback
+### 1. Initialize BabylAI with Environment Configuration
 
-First, configure BabylAI in your app's initialization and set up the token callback:
+First, initialize BabylAI with the appropriate environment configuration and set up the token callback:
 
 ```dart
 void main() {
-  // Configure BabylAI
-  BabylAI.configure('HELP_SCREEN_ID');
+  // Initialize BabylAI with environment configuration
+  BabylAI.initialize(
+    environmentConfig: EnvironmentConfig.development(), // or .production()
+    screenId: 'YOUR_SCREEN_ID',
+  );
   
   // IMPORTANT: You MUST set up a token callback for the package to work
   BabylAI.setTokenCallback(() async {
     // Example implementation to get a token
-    return your_access_token() // string
+    return await getToken(); // Return your access token as string
   });
   
   runApp(MyApp());
 }
 ```
 
-> ⚠️ **Important**: You must call `BabylAI.setTokenCallback()` before using any other BabylAI functionality. Failure to do so will result in authentication errors when trying to launch the chat interface.
+> ⚠️ **Important**: You must call `BabylAI.initialize()` and `BabylAI.setTokenCallback()` before using any other BabylAI functionality. Failure to do so will result in authentication errors when trying to launch the chat interface.
 
-### Token Validation
+### Environment Configuration
+
+The package supports two environments:
+
+- **Production**: Uses production API endpoints, logging disabled by default
+- **Development**: Uses development API endpoints, logging enabled by default
+
+You can customize additional settings:
+
+```dart
+// Production environment with custom settings
+BabylAI.initialize(
+  environmentConfig: EnvironmentConfig.production(
+    enableLogging: false,
+    connectionTimeout: 30000,
+    receiveTimeout: 15000,
+  ),
+  screenId: 'YOUR_SCREEN_ID',
+);
+
+// Development environment with custom settings
+BabylAI.initialize(
+  environmentConfig: EnvironmentConfig.development(
+    enableLogging: true,
+    connectionTimeout: 30000,
+    receiveTimeout: 15000,
+  ),
+  screenId: 'YOUR_SCREEN_ID',
+);
+```
 
 ### 2. Basic Implementation
 
@@ -138,10 +172,15 @@ class BabylAIExample extends StatelessWidget {
 
 #### Methods
 
-- `BabylAI.configure()`: Initialize the BabylAI configuration
+- `BabylAI.initialize({required EnvironmentConfig environmentConfig, required String screenId})`: Initialize BabylAI with environment configuration
 - `BabylAI.setTokenCallback(Future<String> Function() callback)`: Set a callback function that will be called when the token needs to be refreshed
 - `BabylAI.launch(String locale, ThemeMode themeMode, BuildContext context, {Function(String) onMessageReceived})`: Launch the BabylAI chat interface
 - `BabylAI.lauchActiveChat()`: Open the currently active chat session
+
+#### Environment Configuration
+
+- `EnvironmentConfig.production({bool enableLogging, int connectionTimeout, int receiveTimeout})`: Create production environment configuration
+- `EnvironmentConfig.development({bool enableLogging, int connectionTimeout, int receiveTimeout})`: Create development environment configuration
 
 ### Token Callback
 

@@ -9,9 +9,11 @@ class DioClient {
 
   DioClient({required this.dioConfigs})
       : _dio = Dio()
-    ..options.baseUrl = Endpoints.devBaseUrl
-    ..options.connectTimeout = Duration(milliseconds: dioConfigs.connectionTimeout)
-    ..options.receiveTimeout = Duration(milliseconds: dioConfigs.receiveTimeout);
+          ..options.baseUrl = Endpoints.baseUrl
+          ..options.connectTimeout =
+              Duration(milliseconds: dioConfigs.connectionTimeout)
+          ..options.receiveTimeout =
+              Duration(milliseconds: dioConfigs.receiveTimeout);
 
   Dio get dio => _dio;
 

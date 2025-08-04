@@ -17,8 +17,13 @@ import 'package:babylai/gen/assets.gen.dart';
 class HelpScreen extends StatefulWidget {
   final String screenId;
   final VoidCallback onBack;
+  final Map<String, dynamic> userInfo;
 
-  const HelpScreen({super.key, required this.screenId, required this.onBack});
+  const HelpScreen(
+      {super.key,
+      required this.screenId,
+      required this.onBack,
+      required this.userInfo});
 
   @override
   State<HelpScreen> createState() => _HelpScreenState();
@@ -73,6 +78,7 @@ class _HelpScreenState extends State<HelpScreen> {
                           builder: (context) => ChatScreen(
                             option: _chatScreenStore.option,
                             onBack: widget.onBack,
+                            userInfo: widget.userInfo,
                           ),
                         ),
                       );
@@ -213,6 +219,7 @@ class _HelpScreenState extends State<HelpScreen> {
             builder: (context) => ChatScreen(
               option: _chatScreenStore.option,
               onBack: widget.onBack,
+              userInfo: widget.userInfo,
             ),
           ),
         );
@@ -239,6 +246,7 @@ class _HelpScreenState extends State<HelpScreen> {
               builder: (context) => ChatScreen(
                     option: option,
                     onBack: widget.onBack,
+                    userInfo: widget.userInfo,
                   )));
     }
   }

@@ -177,10 +177,11 @@ mixin _$ChatScreenStore on _ChatScreenStore, Store {
       context: context);
 
   @override
-  Future<void> createSessionAndSendMessage(
-      String msg, SenderType type, bool needsAgent, bool isSentByUser) {
-    return _$createSessionAndSendMessageAsyncAction.run(() =>
-        super.createSessionAndSendMessage(msg, type, needsAgent, isSentByUser));
+  Future<void> createSessionAndSendMessage(String msg, SenderType type,
+      bool needsAgent, bool isSentByUser, Map<String, dynamic> userInfo) {
+    return _$createSessionAndSendMessageAsyncAction.run(() => super
+        .createSessionAndSendMessage(
+            msg, type, needsAgent, isSentByUser, userInfo));
   }
 
   late final _$closeSessionAsyncAction =
@@ -195,12 +196,12 @@ mixin _$ChatScreenStore on _ChatScreenStore, Store {
       ActionController(name: '_ChatScreenStore', context: context);
 
   @override
-  void insertMessage(
-      String msg, SenderType type, bool needsAgent, bool isSentByUser) {
+  void insertMessage(String msg, SenderType type, bool needsAgent,
+      bool isSentByUser, Map<String, dynamic> userInfo) {
     final _$actionInfo = _$_ChatScreenStoreActionController.startAction(
         name: '_ChatScreenStore.insertMessage');
     try {
-      return super.insertMessage(msg, type, needsAgent, isSentByUser);
+      return super.insertMessage(msg, type, needsAgent, isSentByUser, userInfo);
     } finally {
       _$_ChatScreenStoreActionController.endAction(_$actionInfo);
     }

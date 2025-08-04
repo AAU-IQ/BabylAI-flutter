@@ -111,8 +111,8 @@ abstract class _ChatScreenStore with Store {
   }
 
   @action
-  void insertMessage(
-      String msg, SenderType type, bool needsAgent, bool isSentByUser) {
+  void insertMessage(String msg, SenderType type, bool needsAgent,
+      bool isSentByUser, Map<String, dynamic> userInfo) {
     messages.insert(
       0,
       MessageEntity(
@@ -139,7 +139,8 @@ abstract class _ChatScreenStore with Store {
       }
       // Handle session creation or message sending
       if (sessionEntity == null) {
-        createSessionAndSendMessage(msg, type, needsAgent, isSentByUser);
+        createSessionAndSendMessage(
+            msg, type, needsAgent, isSentByUser, userInfo);
       } else {
         sendMessage(msg, type, needsAgent, isSentByUser);
       }
@@ -173,14 +174,16 @@ abstract class _ChatScreenStore with Store {
   }
 
   @action
-  Future<void> createSessionAndSendMessage(
-      String msg, SenderType type, bool needsAgent, bool isSentByUser) async {
+  Future<void> createSessionAndSendMessage(String msg, SenderType type,
+      bool needsAgent, bool isSentByUser, Map<String, dynamic> userInfo) async {
     try {
       isLoading = true;
 
       // Create the session
       final params = CreateSessionParams(
-          helpScreenId: option.helpScreenId, optionId: option.id);
+          helpScreenId: option.helpScreenId,
+          optionId: option.id,
+          user: userInfo);
       final response = await _createSessionUsecase.call(params: params);
       sessionEntity = response.session;
 
@@ -226,7 +229,8 @@ abstract class _ChatScreenStore with Store {
   void cleanUp() {
     sessionEntity = null;
     _ablyService.stopConnection();
-    insertMessage(option.assistant?.closing ?? '', SenderType.ai, false, false);
+    insertMessage(
+        option.assistant?.closing ?? '', SenderType.ai, false, false, {});
     isSessionClosed = true;
     _sharedPreferenceHelper.removeAuthToken();
   }

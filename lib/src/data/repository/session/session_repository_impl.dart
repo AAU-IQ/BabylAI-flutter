@@ -10,8 +10,9 @@ class SessionRepositoryImpl extends SessionRepository {
   SessionRepositoryImpl(this._clientSessionApi);
 
   @override
-  Future<RootEntity> createSession(String helpScreenId, String optionId) {
-    return _clientSessionApi.createSession(helpScreenId, optionId);
+  Future<RootEntity> createSession(
+      String helpScreenId, String optionId, Map<String, dynamic> user) {
+    return _clientSessionApi.createSession(helpScreenId, optionId, user);
   }
 
   @override

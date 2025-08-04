@@ -17,12 +17,14 @@ class ChatScreen extends StatefulWidget {
   final Option option;
   final VoidCallback onBack;
   final bool directChat;
+  final Map<String, dynamic> userInfo;
 
   const ChatScreen(
       {super.key,
       required this.option,
       required this.onBack,
-      this.directChat = false});
+      this.directChat = false,
+      required this.userInfo});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -55,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
         Future.delayed(Duration(seconds: 1), () {
           final welcomeMessage = widget.option.assistant?.greeting ?? '';
           _chatScreenStore.insertMessage(
-              welcomeMessage, SenderType.ai, false, false);
+              welcomeMessage, SenderType.ai, false, false, widget.userInfo);
         });
       }
       _chatScreenStore.initAblyService(widget.option);
@@ -149,7 +151,8 @@ class _ChatScreenState extends State<ChatScreen> {
   void _sendMessage() {
     final text = _controller.text.trim();
     if (text.isNotEmpty) {
-      _chatScreenStore.insertMessage(text, SenderType.customer, false, true);
+      _chatScreenStore.insertMessage(
+          text, SenderType.customer, false, true, widget.userInfo);
       _controller.clear();
     }
   }

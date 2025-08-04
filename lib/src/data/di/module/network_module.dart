@@ -4,6 +4,7 @@ import 'package:event_bus/event_bus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:babylai/src/di/service_locator.dart';
+import '../../../core/config/environment_service.dart';
 import '../../../core/data/network/dio/configs/dio_configs.dart';
 import '../../../core/data/network/dio/dio_client.dart';
 import '../../../core/data/network/dio/interceptors/auth_interceptor.dart';
@@ -38,7 +39,7 @@ class NetworkModule {
     // dio:---------------------------------------------------------------------
     if (!GetIt.I.isRegistered<DioConfigs>()) {
       getIt.registerSingleton<DioConfigs>(
-        const DioConfigs(
+        DioConfigs(
           connectionTimeout: Endpoints.connectionTimeout,
           receiveTimeout: Endpoints.receiveTimeout,
         ),
@@ -58,7 +59,7 @@ class NetworkModule {
                 error: true,
                 compact: true,
                 maxWidth: 90,
-                enabled: kDebugMode,
+                enabled: EnvironmentService.shouldEnableLogging,
               ),
               getIt<ErrorInterceptor>(),
             ],

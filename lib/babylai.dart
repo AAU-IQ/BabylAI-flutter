@@ -1,12 +1,15 @@
 library babylai;
 
+import 'package:babylai/src/core/config/environment_config.dart';
+import 'package:babylai/src/core/config/environment_service.dart';
 import 'package:babylai/src/data/sharedpref/SharedPreferenceHelper.dart';
 import 'package:babylai/src/di/service_locator.dart';
-import 'package:babylai/src/presentation/chat_screen/chat_screen.dart';
 import 'package:babylai/src/presentation/chat_screen/store/chat_screen_store.dart';
 import 'package:babylai/src/presentation/help_screen/start_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart';
+
+// Export environment configuration classes for client use
+export 'package:babylai/src/core/config/environment_config.dart';
 
 class BabylAI {
   static late ChatScreenStore _chatScreenStore;
@@ -15,6 +18,7 @@ class BabylAI {
   static late String _locale;
   static late ThemeMode? _theme;
   static late String _screenId;
+  static late Map<String, dynamic> _userInfo;
 
   /// Function to handle token refresh
   static Future<String> Function()? _tokenCallback;
@@ -37,7 +41,7 @@ class BabylAI {
     return null;
   }
 
-  static void _inject() async {
+  static Future<void> _inject() async {
     try {
       await ServiceLocator.configureDependencies();
       _chatScreenStore = getIt<ChatScreenStore>();
@@ -62,12 +66,39 @@ class BabylAI {
     }
   }
 
-  static void configure(String screenId) {
+  /// Initialize the BabylAI SDK with environment configuration
+  /// This must be called before using any other SDK methods
+  static void initialize({
+    required EnvironmentConfig environmentConfig,
+    required String screenId,
+    required Map<String, dynamic> userInfo,
+  }) {
+    EnvironmentService.initialize(environmentConfig);
     _screenId = screenId;
-    _inject();
+    _userInfo = userInfo;
+  }
+
+  /// Configure the SDK (deprecated - use initialize instead)
+  @Deprecated('Use initialize() method instead')
+  static Future<void> configure(String screenId) async {
+    // If not initialized with environment config, default to development
+    if (!EnvironmentService.isInitialized) {
+      EnvironmentService.initialize(EnvironmentConfig.development());
+    }
+    _screenId = screenId;
+    await _inject();
   }
 
   static Future<void> lauchActiveChat() async {
+    // Check if SDK is initialized
+    if (!EnvironmentService.isInitialized) {
+      throw Exception(
+          'BabylAI SDK not initialized. Please call BabylAI.initialize() with proper environment configuration before launching.');
+    }
+
+    // Inject dependencies if not already done
+    await _inject();
+
     // Check if we have a valid token before proceeding
     if (!await _validateToken()) {
       print('Error: No valid token available for launching active chat');
@@ -82,6 +113,7 @@ class BabylAI {
           locale: _locale,
           theme: _theme,
           directChat: true,
+          userInfo: _userInfo,
           onBack: () {
             Navigator.of(_context).pop();
           },
@@ -118,10 +150,19 @@ class BabylAI {
     BuildContext context, {
     Function(String)? onMessageReceived,
   }) async {
+    // Check if SDK is initialized
+    if (!EnvironmentService.isInitialized) {
+      throw Exception(
+          'BabylAI SDK not initialized. Please call BabylAI.initialize() with proper environment configuration before launching.');
+    }
+
     _context = context;
     _onMessageReceived = onMessageReceived;
     _locale = locale;
     _theme = theme;
+
+    // Inject dependencies if not already done
+    await _inject();
 
     // Check if we have a valid token before proceeding
     if (!await _validateToken()) {
@@ -136,6 +177,7 @@ class BabylAI {
           screenId: _screenId,
           locale: locale,
           theme: theme,
+          userInfo: _userInfo,
           onBack: () {
             Navigator.of(_context).pop();
           },
