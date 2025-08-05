@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://babylai.net/assets/33-C9VTGXuK.png" alt="BabylAI Logo" height="200"/>
+  <img src="https://babylai.net/assets/logo-BdByHTQ3.svg" alt="BabylAI Logo" height="200"/>
 </p>
 
 <!--
@@ -37,7 +37,7 @@ Since this is a private package, you'll need to add it to your `pubspec.yaml`:
 dependencies:
   babylai:
     git:
-      url: https://github.com/your-organization/babylai.git
+      url: https://github.com/AAU-IQ/BabylAI-flutter.git
       ref: master  # or specify a version tag
 ```
 
