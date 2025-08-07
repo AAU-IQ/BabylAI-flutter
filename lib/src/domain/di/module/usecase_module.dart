@@ -21,20 +21,28 @@ class UseCaseModule {
     //   LoginUseCase(getIt<UserRepository>()),
     // );
 
-    getIt.registerSingleton<GetHelpScreenUsecase>(
-      GetHelpScreenUsecase(getIt<HelpScreenRepository>())
-    );
+    if (!getIt.isRegistered<GetHelpScreenUsecase>()) {
+      getIt.registerSingleton<GetHelpScreenUsecase>(
+        GetHelpScreenUsecase(getIt<HelpScreenRepository>()),
+      );
+    }
 
-    getIt.registerSingleton<CreateSessionUsecase>(
-      CreateSessionUsecase(getIt<SessionRepository>())
-    );
+    if (!getIt.isRegistered<CreateSessionUsecase>()) {
+      getIt.registerSingleton<CreateSessionUsecase>(
+        CreateSessionUsecase(getIt<SessionRepository>()),
+      );
+    }
 
-    getIt.registerSingleton<SendMessageUsecase>(
-      SendMessageUsecase(getIt<SessionRepository>())
-    );
+    if (!getIt.isRegistered<SendMessageUsecase>()) {
+      getIt.registerSingleton<SendMessageUsecase>(
+        SendMessageUsecase(getIt<SessionRepository>()),
+      );
+    }
 
-    getIt.registerSingleton<CloseSessionUsecase>(
-        CloseSessionUsecase(getIt<SessionRepository>())
-    );
+    if (!getIt.isRegistered<CloseSessionUsecase>()) {
+      getIt.registerSingleton<CloseSessionUsecase>(
+        CloseSessionUsecase(getIt<SessionRepository>()),
+      );
+    }
   }
 }

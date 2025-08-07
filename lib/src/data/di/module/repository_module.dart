@@ -19,12 +19,20 @@ class RepositoryModule {
     //   getIt<SharedPreferenceHelper>(),
     // ));
     //
-    getIt.registerSingleton<HelpScreenRepository>(HelpScreenRepositoryImpl(
-      getIt<HelpScreenApi>(),
-    ));
+    if (!getIt.isRegistered<HelpScreenRepository>()) {
+      getIt.registerSingleton<HelpScreenRepository>(
+        HelpScreenRepositoryImpl(
+          getIt<HelpScreenApi>(),
+        ),
+      );
+    }
 
-    getIt.registerSingleton<SessionRepository>(SessionRepositoryImpl(
-      getIt<ClientSessionApi>(),
-    ));
+    if (!getIt.isRegistered<SessionRepository>()) {
+      getIt.registerSingleton<SessionRepository>(
+        SessionRepositoryImpl(
+          getIt<ClientSessionApi>(),
+        ),
+      );
+    }
   }
 }

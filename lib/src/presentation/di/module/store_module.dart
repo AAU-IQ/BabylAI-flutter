@@ -20,20 +20,24 @@ class StoreModule {
     // );
 
     // stores:------------------------------------------------------------------
-    getIt.registerSingleton<HelpScreenStore>(
-      HelpScreenStore(
-        getIt<GetHelpScreenUsecase>(),
-      ),
-    );
+    if (!getIt.isRegistered<HelpScreenStore>()) {
+      getIt.registerSingleton<HelpScreenStore>(
+        HelpScreenStore(
+          getIt<GetHelpScreenUsecase>(),
+        ),
+      );
+    }
 
-    getIt.registerSingleton<ChatScreenStore>(
-      ChatScreenStore(
-        getIt<CreateSessionUsecase>(),
-        getIt<SendMessageUsecase>(),
-        getIt<CloseSessionUsecase>(),
-        AblyService(),
-        getIt<SharedPreferenceHelper>(),
-      ),
-    );
+    if (!getIt.isRegistered<ChatScreenStore>()) {
+      getIt.registerSingleton<ChatScreenStore>(
+        ChatScreenStore(
+          getIt<CreateSessionUsecase>(),
+          getIt<SendMessageUsecase>(),
+          getIt<CloseSessionUsecase>(),
+          AblyService(),
+          getIt<SharedPreferenceHelper>(),
+        ),
+      );
+    }
   }
 }
