@@ -55,6 +55,11 @@ void main() {
   BabylAI.initialize(
     environmentConfig: EnvironmentConfig.development(), // or .production()
     screenId: 'YOUR_SCREEN_ID',
+    userInfo: {
+      'name': 'John Doe',
+      'email': 'john.doe@example.com',
+      'phone': '1234567890',
+    },
   );
   
   // IMPORTANT: You MUST set up a token callback for the package to work
